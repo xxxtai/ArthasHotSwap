@@ -1,12 +1,23 @@
 <idea-plugin>
     <id>com.xxxtai.arthas.arthas-hotswap</id>
-    <name>Plugin display name here</name>
-    <vendor email="support@yourcompany.com" url="http://www.yourcompany.com">YourCompany</vendor>
+    <name>Arthas Hotswap</name>
+    <vendor email="xxxtai@163.com" url="http://www.yourcompany.com">xxxtai</vendor>
 
     <description><![CDATA[
-    Enter short description for your plugin here.<br>
-    <em>most HTML tags may be used</em>
+    <p> Arthas Hotswap  </p>
+    <ul> ljerlewjlrjwelrjlkewjrlwejlrjeeltjlrtjklrjterjltjl </ul>
     ]]></description>
+
+    <change-notes><![CDATA[
+      <p>2.0-RELEASE</p>
+      <ul>
+        <li>1.supports Arthas commands such as watch, trace, ognl static, ognl bean method, etc.</li>
+      </ul>
+      <ul>
+        <li>1.支持Arthas 常用命令,比如 watch、trace、ognl static、ognl bean method</li>
+      </ul>
+    ]]></change-notes>
+
 
     <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
          on how to target different products -->
@@ -14,8 +25,8 @@
     <depends>com.intellij.modules.lang</depends>
     -->
 
-    <extensions defaultExtensionNs="com.intellij">
-        <!-- Add your extensions here -->
+    <extensions defaultExtensionNs="com.xxxtai">
+        <!-- Add your ex999tensions here -->
     </extensions>
 
     <actions>

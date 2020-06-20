@@ -43,9 +43,9 @@ public class SwapThisClass extends AnAction {
         String title = "Hello World!";
 
         StringBuilder builder = new StringBuilder();
-        builder.append("className:").append(className)
-                .append("methodName:").append(methodName)
-                .append("classPath:").append(classPath);
+        builder.append("className:").append(className).append("\n")
+                .append("methodName:").append(methodName).append("\n")
+                .append("classPath:").append(classPath).append("\n");
 
         Messages.showMessageDialog(project, builder.toString(), title, Messages.getInformationIcon());
     }
