@@ -20,5 +20,18 @@
 
     <actions>
         <!-- Add your actions here -->
+        <action id="swapThisClass"
+                class="com.xxxtai.arthas.action.SwapThisClass"
+                text="swap this class"
+                description="arthas hotswap">
+        </action>
+
+        <group id="arthas-plugin" popup="true" text="Arthas Hotswap">
+            <add-to-group group-id="EditorPopupMenu" anchor="after" relative-to-action="CopyReference"/>
+            <add-to-group group-id="ToolsMenu" anchor="first"/>
+            <separator/>
+            <reference ref="swapThisClass"/>
+
+        </group>
     </actions>
 </idea-plugin>
