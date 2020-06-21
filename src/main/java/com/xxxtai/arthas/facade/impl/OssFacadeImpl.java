@@ -37,7 +37,7 @@ public class OssFacadeImpl implements OssFacade {
             ossClient.putObject(putObjectRequest);
             ossClient.shutdown();
 
-            return Result.buildSuccessResult(ossInfo.objectAccessUrlPrefix + key);
+            return Result.buildSuccessResult(ossInfo.objectAccessUrlPrefix + CommonConstants.PATH_SEPARATOR + key);
         } catch (ClientException e) {
             e.printStackTrace();
             return Result.buildErrorResult("Please check your network");
