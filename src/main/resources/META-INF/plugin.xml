@@ -15,17 +15,6 @@
     <ul>自动生成命令复制到剪切板->登录远程环境粘贴执行命令->热部署成功<ul/>
     ]]></description>
 
-    <change-notes><![CDATA[
-      <p>2.0-RELEASE</p>
-      <ul>
-        <li>1.supports Arthas commands such as watch, trace, ognl static, ognl bean method, etc.</li>
-      </ul>
-      <ul>
-        <li>1.支持Arthas 常用命令,比如 watch、trace、ognl static、ognl bean method</li>
-      </ul>
-    ]]></change-notes>
-
-
     <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
          on how to target different products -->
     <!-- uncomment to enable plugin in all products

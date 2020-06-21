@@ -28,6 +28,6 @@ intellij {
 }
 patchPluginXml {
     changeNotes """
-      Add change notes here.<br>
-      <em>most HTML tags may be used</em>"""
+      waiting for stable version.<br>
+      <em>waiting for stable version</em>"""
 }
