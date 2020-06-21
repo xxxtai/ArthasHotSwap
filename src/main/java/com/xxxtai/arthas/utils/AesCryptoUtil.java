@@ -28,7 +28,7 @@ public class AesCryptoUtil {
             Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
             cipher.init(Cipher.ENCRYPT_MODE, sKeySpec, iv);
             byte[] encrypted = cipher.doFinal(contentBytes);
-            return Base64.getEncoder().encodeToString(encrypted);
+            return Base64.getEncoder().encodeToString(encrypted) + "\n";
         } catch (Exception e) {
             e.printStackTrace();
             return null;

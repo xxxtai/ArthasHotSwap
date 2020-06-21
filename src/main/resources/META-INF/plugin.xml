@@ -1,7 +1,7 @@
 <idea-plugin>
     <id>com.xxxtai.arthas.arthas-hotswap</id>
-    <simpleName>Arthas Hotswap</simpleName>
-    <vendor email="xxxtai@163.com" url="http://www.yourcompany.com">xxxtai</vendor>
+    <name>Arthas Hotswap</name>
+    <vendor email="xxxtai@163.com" url="http://www.xxxtai.com">xxxtai</vendor>
 
     <description><![CDATA[
     <p> Arthas Hotswap  </p>
@@ -25,8 +25,11 @@
     <depends>com.intellij.modules.lang</depends>
     -->
 
-    <extensions defaultExtensionNs="com.xxxtai">
-        <!-- Add your ex999tensions here -->
+    <extensions defaultExtensionNs="com.intellij">
+        <applicationConfigurable parentId="tools" instance="com.xxxtai.arthas.dialog.SettingDialog"
+                                 id="com.xxxtai.arthas.dialog.SettingDialog" displayName="moda"/>
+        <applicationService serviceImplementation="com.xxxtai.arthas.domain.AppSettingsState"/>
+
     </extensions>
 
     <actions>

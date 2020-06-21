@@ -1,4 +1,7 @@
 package com.xxxtai.arthas.utils;
 
-public class BeansFactory {
+
+
+public class OssUtil {
+
 }
