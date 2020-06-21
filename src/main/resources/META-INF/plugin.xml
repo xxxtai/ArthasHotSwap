@@ -1,11 +1,18 @@
 <idea-plugin>
     <id>com.xxxtai.arthas.arthas-hotswap</id>
     <name>Arthas Hot Swap</name>
-    <vendor email="xxxtai@163.com" url="https://github.com/xxxtai/arthas-hotswap">xxxtai</vendor>
-
+    <vendor email="xxxtai@163.com" url="https://github.com/xxxtai/arthas-hotswap">moda</vendor>
     <description><![CDATA[
-    <p> Arthas Hotswap  </p>
-    <ul> ljerlewjlrjwelrjlkewjrlwejlrjeeltjlrtjklrjterjltjl </ul>
+    <p> Arthas Hot Swap </p>
+    <ul> 无需安装任何sdk实现远程热部署，提升开发效率利器，使用流程：本地编译->右键选择Arthas Hot Swap-></ul>
+    <ul>自动生成命令复制到剪切板->登录远程环境粘贴执行命令->热部署成功</ul>
+
+    <ul> 阿里巴巴开源代码诊断工具——Arthas，具有非常强大的功能，其中一项就是热替换，通过redefine命令替换新的class文件。</ul>
+    <ul> 这是一个非常棒的功能，可以帮助开发避免重新启动，迅速部署代码到远程环境。但是，一般远程环境都是隔离的，新class文件</ul>
+    <ul> 上传到远程环境是个问题。Arthas官方文档推荐使用jad/mc/redefine等一连串命令，流程大概是：jad命令对老class进行反编译-></ul>
+    <ul> vim编辑源码->mc命令编译源码->redefine热替换class，这种方式存在两个问题：一是太麻烦，二是mc编译大概率会失败。</ul>
+    <ul> 这个插件就是为了提升使用Arthas进行热替换的效率，开发者使用该插件的流程：本地编译->右键选择Arthas Hot Swap-></ul>
+    <ul>自动生成命令复制到剪切板->登录远程环境粘贴执行命令->热部署成功<ul/>
     ]]></description>
 
     <change-notes><![CDATA[
@@ -29,11 +36,9 @@
         <applicationConfigurable parentId="tools" instance="com.xxxtai.arthas.dialog.SettingDialog"
                                  id="com.xxxtai.arthas.dialog.SettingDialog" displayName="Arthas Hot Swap"/>
         <applicationService serviceImplementation="com.xxxtai.arthas.domain.AppSettingsState"/>
-
     </extensions>
 
     <actions>
-        <!-- Add your actions here -->
         <action id="swapThisClass"
                 class="com.xxxtai.arthas.action.SwapThisClass"
                 text="Swap This Class"
@@ -44,7 +49,6 @@
             <add-to-group group-id="EditorPopupMenu" anchor="after" relative-to-action="CopyReference"/>
             <separator/>
             <reference ref="swapThisClass"/>
-
         </group>
     </actions>
 </idea-plugin>

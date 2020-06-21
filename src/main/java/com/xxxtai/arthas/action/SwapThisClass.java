@@ -4,7 +4,6 @@ import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtil;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.Messages;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
@@ -30,11 +29,12 @@ public class SwapThisClass extends AnAction {
     @Override
     public void actionPerformed(AnActionEvent e) {
         DataContext dataContext = e.getDataContext();
+        Project project = dataContext.getData(CommonDataKeys.PROJECT);
         try {
             ClassInfo currentClassInfo = parseClassInfoFromDataContext(dataContext);
             byte[] currentClassBytes = findTheSwapClass(currentClassInfo);
             if (currentClassBytes == null) {
-                NotifyUtil.error(dataContext, currentClassInfo.toString() + "\n" + "the class of " + currentClassInfo.getClassPath() + " can not be found");
+                NotifyUtil.error(project, currentClassInfo.toString() + "\n" + "the class of " + currentClassInfo.getClassPath() + " can not be found");
                 return;
             }
 
@@ -42,7 +42,7 @@ public class SwapThisClass extends AnAction {
 
             Result<String> uploadCurrentClassResult = ossFacade.uploadString(currentClassInfo.getSimpleName(), encryptInfo.getEncryptContent());
             if (!uploadCurrentClassResult.isSuccess()) {
-                NotifyUtil.error(dataContext, uploadCurrentClassResult.getErrorMsg());
+                NotifyUtil.error(project, uploadCurrentClassResult.getErrorMsg());
                 return;
             }
             currentClassInfo.setCurrentClassOssUrl(uploadCurrentClassResult.getValue());
@@ -50,18 +50,18 @@ public class SwapThisClass extends AnAction {
             String hotSwapScript = renderHotSwapScriptWithTemplate(getClass().getClassLoader(), currentClassInfo);
             Result<String> uploadHotSwapScriptResult = ossFacade.uploadString("hotSwapScript", hotSwapScript);
             if (!uploadHotSwapScriptResult.isSuccess()) {
-                NotifyUtil.error(dataContext, uploadHotSwapScriptResult.getErrorMsg());
+                NotifyUtil.error(project, uploadHotSwapScriptResult.getErrorMsg());
                 return;
             }
 
             String command = String.format("curl -L %s | sh -s %s %s", uploadHotSwapScriptResult.getValue(), encryptInfo.getKey(), encryptInfo.getIv());
             ClipboardUtils.setClipboardString(command);
-            Messages.showMessageDialog(dataContext.getData(CommonDataKeys.PROJECT),
+            NotifyUtil.error(project,
                     "command:" + command + "\n" +
-                            currentClassInfo.toString(),
-                    "提示", Messages.getInformationIcon());
+                            currentClassInfo.toString());
+            NotifyUtil.notifyMessage(project, "the command of hot swap has been copied to the clipboard, go to the host to execute the command");
         } catch (Exception t) {
-            NotifyUtil.error(dataContext, StringUtils.isNotBlank(t.getMessage()) ? t.getMessage() : "Internal exception");
+            NotifyUtil.error(project, StringUtils.isNotBlank(t.getMessage()) ? t.getMessage() : "Internal exception");
             t.printStackTrace();
         }
     }

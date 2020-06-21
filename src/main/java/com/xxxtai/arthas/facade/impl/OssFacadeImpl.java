@@ -8,7 +8,6 @@ import com.aliyun.oss.model.CannedAccessControlList;
 import com.aliyun.oss.model.ObjectMetadata;
 import com.aliyun.oss.model.PutObjectRequest;
 import com.aliyun.oss.model.StorageClass;
-import com.intellij.openapi.actionSystem.DataContext;
 import com.xxxtai.arthas.constants.CommonConstants;
 import com.xxxtai.arthas.domain.AppSettingsState;
 import com.xxxtai.arthas.domain.Result;
@@ -21,7 +20,11 @@ public class OssFacadeImpl implements OssFacade {
 
     @Override
     public Result<String> uploadString(String key, String content) {
-        OssInfo ossInfo = parseOssInfo();
+        Result<OssInfo> parseResult = parseOssInfo();
+        if (!parseResult.isSuccess()) {
+            return Result.buildErrorResult(parseResult.getErrorMsg());
+        }
+        OssInfo ossInfo = parseResult.getValue();
         try {
             OSS ossClient = new OSSClientBuilder().build(ossInfo.endpoint, ossInfo.accessKeyId, ossInfo.accessKeySecret);
             PutObjectRequest putObjectRequest = new PutObjectRequest(BUCKET_NAME, key, new ByteArrayInputStream(content.getBytes()));
@@ -41,15 +44,18 @@ public class OssFacadeImpl implements OssFacade {
         }
     }
 
-    private OssInfo parseOssInfo() {
+    private Result<OssInfo> parseOssInfo() {
         OssInfo ossInfo = new OssInfo();
         AppSettingsState settings = AppSettingsState.getInstance();
+        if (!settings.endpoint.contains(CommonConstants.URL_SEPARATOR)) {
+            return Result.buildErrorResult("Please check your setting of endpoint");
+        }
         ossInfo.endpoint = settings.endpoint;
         ossInfo.accessKeyId = settings.accessKeyId;
         ossInfo.accessKeySecret = settings.accessKeySecret;
         String[] urlParts = settings.endpoint.split(CommonConstants.URL_SEPARATOR);
         ossInfo.objectAccessUrlPrefix = urlParts[0] + CommonConstants.URL_SEPARATOR + BUCKET_NAME + "." + urlParts[1];
-        return ossInfo;
+        return Result.buildSuccessResult(ossInfo);
     }
 
     private class OssInfo {
