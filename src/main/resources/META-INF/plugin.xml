@@ -1,7 +1,7 @@
 <idea-plugin>
     <id>com.xxxtai.arthas.arthas-hotswap</id>
-    <name>Arthas Hotswap</name>
-    <vendor email="xxxtai@163.com" url="http://www.xxxtai.com">xxxtai</vendor>
+    <name>Arthas Hot Swap</name>
+    <vendor email="xxxtai@163.com" url="https://github.com/xxxtai/arthas-hotswap">xxxtai</vendor>
 
     <description><![CDATA[
     <p> Arthas Hotswap  </p>
@@ -27,7 +27,7 @@
 
     <extensions defaultExtensionNs="com.intellij">
         <applicationConfigurable parentId="tools" instance="com.xxxtai.arthas.dialog.SettingDialog"
-                                 id="com.xxxtai.arthas.dialog.SettingDialog" displayName="moda"/>
+                                 id="com.xxxtai.arthas.dialog.SettingDialog" displayName="Arthas Hot Swap"/>
         <applicationService serviceImplementation="com.xxxtai.arthas.domain.AppSettingsState"/>
 
     </extensions>
@@ -36,13 +36,12 @@
         <!-- Add your actions here -->
         <action id="swapThisClass"
                 class="com.xxxtai.arthas.action.SwapThisClass"
-                text="swap this class"
-                description="arthas hotswap">
+                text="Swap This Class"
+                description="arthas hot swap">
         </action>
 
-        <group id="arthas-plugin" popup="true" text="Arthas Hotswap">
+        <group id="arthas-plugin" popup="true" text="Arthas Hot Swap">
             <add-to-group group-id="EditorPopupMenu" anchor="after" relative-to-action="CopyReference"/>
-            <add-to-group group-id="ToolsMenu" anchor="first"/>
             <separator/>
             <reference ref="swapThisClass"/>
 
