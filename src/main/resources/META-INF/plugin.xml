@@ -1,6 +1,6 @@
 <idea-plugin>
     <id>com.xxxtai.arthas.arthas-hotswap</id>
-    <name>Arthas Hotswap</name>
+    <simpleName>Arthas Hotswap</simpleName>
     <vendor email="xxxtai@163.com" url="http://www.yourcompany.com">xxxtai</vendor>
 
     <description><![CDATA[

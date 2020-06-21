@@ -1,25 +1,40 @@
 package com.xxxtai.arthas.utils;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 
 public class IoUtil {
 
-    public static String getFile(ClassLoader classLoader, String filePath) throws Exception{
-        InputStream in = classLoader.getResourceAsStream(filePath);
-        if (in == null) {
-            throw new IOException(filePath + " can not be found ");
+    public static String getResourceFile(ClassLoader classLoader, String filePath) throws Exception{
+        try (InputStream in = classLoader.getResourceAsStream(filePath)){
+            if (in == null) {
+                throw new IOException(filePath + " can not be found ");
+            }
+            InputStreamReader reader = new InputStreamReader(in, StandardCharsets.UTF_8);
+            BufferedReader bufferedReader = new BufferedReader(reader);
+            String line;
+            StringBuilder builder = new StringBuilder();
+            while ((line = bufferedReader.readLine()) != null) {
+                builder.append(line).append("\n");
+            }
+            return builder.toString();
         }
-        InputStreamReader reader = new InputStreamReader(in, StandardCharsets.UTF_8);
-        BufferedReader bufferedReader = new BufferedReader(reader);
-        String line;
-        StringBuilder builder = new StringBuilder();
-        while ((line = bufferedReader.readLine()) != null) {
-            builder.append(line).append("\n");
+    }
+
+    public static byte[] getTargetClass(String filePath) throws Exception {
+        File file = new File(filePath);
+        if (!file.exists()) {
+            throw new RuntimeException("the file of " + filePath + " does not exist ");
         }
-        return builder.toString();
+        try (BufferedInputStream bufferedInputStream = new BufferedInputStream(new FileInputStream(file))){
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream((int)file.length());
+            int buf_size = 1024;
+            byte[] buffer = new byte[buf_size];
+            int len;
+            while ((len = bufferedInputStream.read(buffer, 0, buf_size)) > 0) {
+                byteArrayOutputStream.write(buffer, 0, len);
+            }
+            return byteArrayOutputStream.toByteArray();
+        }
     }
 }

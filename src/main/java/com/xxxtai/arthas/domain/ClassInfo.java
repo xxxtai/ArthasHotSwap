@@ -1,45 +1,32 @@
 package com.xxxtai.arthas.domain;
 
-import com.intellij.openapi.actionSystem.CommonDataKeys;
-import com.intellij.openapi.actionSystem.DataContext;
-import com.intellij.openapi.project.Project;
-import com.intellij.psi.*;
+import com.xxxtai.arthas.constants.ClassIdentity;
 
 public class ClassInfo {
 
-    private String name;
+    /**
+     * @see ClassIdentity.Type
+     */
+    private String classType;
+
+    private String projectBasePath;
+
+    private String simpleName;
 
     private String qualifiedName;
+
+    private String belongedModuleName;
 
     private String classPath;
 
     private String currentClassOssUrl;
 
-    public ClassInfo(DataContext context) {
-        Project project = context.getData(CommonDataKeys.PROJECT);
-        if (project == null) {
-            return;
-        }
-
-        PsiElement psiElement = CommonDataKeys.PSI_ELEMENT.getData(context);
-        if (psiElement instanceof PsiClass) {
-            PsiClass psiClass = (PsiClass) psiElement;
-            this.name = psiClass.getName();
-            this.qualifiedName = psiClass.getQualifiedName();
-        }
-
-        PsiFile psiFile = context.getData(CommonDataKeys.PSI_FILE);
-        if (psiFile != null) {
-            this.classPath = psiFile.getVirtualFile().getPath();
-        }
+    public String getSimpleName() {
+        return simpleName;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+    public void setSimpleName(String simpleName) {
+        this.simpleName = simpleName;
     }
 
     public String getQualifiedName() {
@@ -48,6 +35,14 @@ public class ClassInfo {
 
     public void setQualifiedName(String qualifiedName) {
         this.qualifiedName = qualifiedName;
+    }
+
+    public String getBelongedModuleName() {
+        return belongedModuleName;
+    }
+
+    public void setBelongedModuleName(String belongedModuleName) {
+        this.belongedModuleName = belongedModuleName;
     }
 
     public String getClassPath() {
@@ -64,5 +59,33 @@ public class ClassInfo {
 
     public void setCurrentClassOssUrl(String currentClassOssUrl) {
         this.currentClassOssUrl = currentClassOssUrl;
+    }
+
+    public String getProjectBasePath() {
+        return projectBasePath;
+    }
+
+    public void setProjectBasePath(String projectBasePath) {
+        this.projectBasePath = projectBasePath;
+    }
+
+    @Override
+    public String toString() {
+        return "classInfo:{" +
+                "projectBasePath: " + projectBasePath + ",\n" +
+                "simpleName: " + simpleName + ",\n" +
+                "qualifiedName: " + qualifiedName + ",\n" +
+                "belongedModuleName: " + belongedModuleName + ",\n" +
+                "classPath: " + classPath + ",\n" +
+                "currentClassOssUrl: " + currentClassOssUrl + ",\n" +
+                "}";
+    }
+
+    public String getClassType() {
+        return classType;
+    }
+
+    public void setClassType(String classType) {
+        this.classType = classType;
     }
 }

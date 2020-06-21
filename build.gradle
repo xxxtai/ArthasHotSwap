@@ -16,8 +16,8 @@ dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
     compile 'org.apache.commons:commons-text:1.8'
     runtime 'org.apache.commons:commons-text:1.8'
-    compile 'com.alibaba:fastjson:1.2.68.noneautotype'
-    runtime 'com.alibaba:fastjson:1.2.68.noneautotype'
+//    compile 'com.alibaba:fastjson:1.2.69'
+//    runtime 'com.alibaba:fastjson:1.2.69'
 }
 
 // See https://github.com/JetBrains/gradle-intellij-plugin/
