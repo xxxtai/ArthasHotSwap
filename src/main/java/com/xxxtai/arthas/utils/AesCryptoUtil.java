@@ -43,9 +43,4 @@ public class AesCryptoUtil {
         }
         return bytes;
     }
-
-    public static void main(String[] args) throws UnsupportedEncodingException {
-        String encodeString = encrypt("你好，hello moda, 测试中文 just do it，干你", "12230000000000000000000440000000", "98230000000000000000000000000000");
-        System.out.println(encodeString);
-    }
 }

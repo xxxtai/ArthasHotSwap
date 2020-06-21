@@ -8,6 +8,6 @@ public class NotifyUtil {
 
     public static void error(DataContext dataContext, String errorMsg) {
         Messages.showMessageDialog(dataContext.getData(CommonDataKeys.PROJECT), errorMsg,
-                "Arthas HotSwap error", Messages.getInformationIcon());
+                "Arthas Hot Swap", Messages.getInformationIcon());
     }
 }

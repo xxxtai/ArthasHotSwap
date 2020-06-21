@@ -30,7 +30,7 @@ public class ClipboardUtils {
             Transferable trans = new StringSelection(text);
             clipboard.setContents(trans, null);
         } catch (Exception e) {
-           //
+            //
         }
     }
 

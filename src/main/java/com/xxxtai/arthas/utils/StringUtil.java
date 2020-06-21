@@ -1,7 +1,7 @@
 package com.xxxtai.arthas.utils;
 
 public class StringUtil {
-    private static final char[] bcdLookup = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
+    private static final char[] bcdLookup = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
 
     public static String bytes2Hex(byte[] bytes) {
         StringBuilder sb = new StringBuilder(bytes.length * 2);

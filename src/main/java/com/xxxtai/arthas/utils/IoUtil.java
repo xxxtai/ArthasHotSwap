@@ -5,8 +5,8 @@ import java.nio.charset.StandardCharsets;
 
 public class IoUtil {
 
-    public static String getResourceFile(ClassLoader classLoader, String filePath) throws Exception{
-        try (InputStream in = classLoader.getResourceAsStream(filePath)){
+    public static String getResourceFile(ClassLoader classLoader, String filePath) throws Exception {
+        try (InputStream in = classLoader.getResourceAsStream(filePath)) {
             if (in == null) {
                 throw new IOException(filePath + " can not be found ");
             }
@@ -26,8 +26,8 @@ public class IoUtil {
         if (!file.exists()) {
             throw new RuntimeException("the file of " + filePath + " does not exist ");
         }
-        try (BufferedInputStream bufferedInputStream = new BufferedInputStream(new FileInputStream(file))){
-            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream((int)file.length());
+        try (BufferedInputStream bufferedInputStream = new BufferedInputStream(new FileInputStream(file))) {
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream((int) file.length());
             int buf_size = 1024;
             byte[] buffer = new byte[buf_size];
             int len;
