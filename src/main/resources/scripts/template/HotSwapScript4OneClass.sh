@@ -44,12 +44,20 @@ exec 8<> tmp_in
 
 sleep 2s
 echo "1" >> tmp_in
+
 sleep 2s
-echo "redefine ./${className}.class" >> tmp_in
+echo "redefine $(pwd)/${className}.class" >> tmp_in
+
+sleep 2s
+echo "
+echo '
+************************* The following files were successfully hot deployed *****************************
+***
+*** ${className}.class
+***
+***********************************************************************************************************
+'
+"
+
+sleep 2s
 echo "stop" >> tmp_in
-sleep 1s
-echo "***************************** The following files were successfully hot deployed *****************************"
-echo "***"
-echo "*** ${className}.class"
-echo "***"
-echo "**************************************************************************************************************"
