@@ -1,24 +1,24 @@
 package com.xxxtai.arthas.action;
 
 import com.intellij.openapi.actionSystem.*;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.module.ModuleUtil;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.xxxtai.arthas.constants.ClassIdentity;
+import com.xxxtai.arthas.dialog.MyToolWindow;
 import com.xxxtai.arthas.domain.ClassInfo;
 import com.xxxtai.arthas.domain.EncryptInfo;
 import com.xxxtai.arthas.domain.Result;
 import com.xxxtai.arthas.facade.OssFacade;
 import com.xxxtai.arthas.facade.impl.OssFacadeImpl;
 import com.xxxtai.arthas.utils.*;
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.text.StringSubstitutor;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import javax.swing.*;
 
 import static com.xxxtai.arthas.constants.CommonConstants.PATH_SEPARATOR;
 import static com.xxxtai.arthas.constants.CommonConstants.SRC_PATH_TOKEN;
@@ -37,13 +37,15 @@ public class SwapThisClass extends AnAction {
             byte[] currentClassBytes = findTheSwapClass(currentClassInfo);
             if (currentClassBytes == null) {
                 NotifyUtil.error(project,
-                    currentClassInfo.toString() + "\n" + "the class of " + currentClassInfo.getClassPath() + " can not be found");
+                    "Please compile the file first ! "
+                        + "\nCan't find the class:" + currentClassInfo.getClassPath());
                 return;
             }
 
             EncryptInfo encryptInfo = encryptTheSwapClass(currentClassBytes);
 
-            Result<String> uploadCurrentClassResult = ossFacade.uploadString(currentClassInfo.getSimpleName(),
+            Result<String> uploadCurrentClassResult = ossFacade.uploadString(
+                generateEncryptKey(project, currentClassInfo.getSimpleName()),
                 encryptInfo.getEncryptContent());
             if (!uploadCurrentClassResult.isSuccess()) {
                 NotifyUtil.error(project, uploadCurrentClassResult.getErrorMsg());
@@ -52,7 +54,9 @@ public class SwapThisClass extends AnAction {
             currentClassInfo.setCurrentClassOssUrl(uploadCurrentClassResult.getValue());
 
             String hotSwapScript = renderHotSwapScriptWithTemplate(getClass().getClassLoader(), currentClassInfo);
-            Result<String> uploadHotSwapScriptResult = ossFacade.uploadString("hotSwapScript", hotSwapScript);
+            Result<String> uploadHotSwapScriptResult = ossFacade.uploadString(
+                generateEncryptKey(project,"hotSwapScript"),
+                hotSwapScript);
             if (!uploadHotSwapScriptResult.isSuccess()) {
                 NotifyUtil.error(project, uploadHotSwapScriptResult.getErrorMsg());
                 return;
@@ -61,15 +65,34 @@ public class SwapThisClass extends AnAction {
             String command = String.format("curl -L %s | sh -s %s %s", uploadHotSwapScriptResult.getValue(), encryptInfo.getKey(),
                 encryptInfo.getIv());
             ClipboardUtils.setClipboardString(command);
-            NotifyUtil.error(project,
-                "command:" + command + "\n" +
-                    currentClassInfo.toString());
-            NotifyUtil.notifyMessage(project,
-                "the command of hot swap has been copied to the clipboard, go to the host to execute the command");
-        } catch (Exception t) {
-            NotifyUtil.error(project, StringUtils.isNotBlank(t.getMessage()) ? t.getMessage() : "Internal exception");
-            t.printStackTrace();
+
+            notifyResult(project, currentClassInfo, command);
+        } catch (Throwable t) {
+            NotifyUtil.error(project, "Internal exception : " + t.getMessage());
+            MyToolWindow.getInstance().getjTextArea().append(IoUtil.printStackTrace(t));
         }
+    }
+
+    private void notifyResult(Project project, ClassInfo currentClassInfo, String command) {
+        JTextArea jTextArea = MyToolWindow.getInstance().getjTextArea();
+
+        jTextArea.append("\n" + currentClassInfo.toString());
+        jTextArea.append("\n\n************************************************ The following string is the command of hot swap ************************************************");
+        jTextArea.append("\n");
+        jTextArea.append("\n" + command);
+        jTextArea.append("\n");
+        jTextArea.append("\n********************************* Copy this command, and then go to the host to execute the command ***********************************************\n\n");
+
+        NotifyUtil.notifyMessage(project,
+            "Arthas Hot Swap Tip : the command of hot swap has been copied to the clipboard, go to the host to execute the command");
+    }
+
+    private String generateEncryptKey(Project project, String keyWord) {
+        byte[] keyBytes = AesCryptoUtil.generalRandomBytes(16);
+        byte[] ivBytes = AesCryptoUtil.generalRandomBytes(16);
+        String key = (project == null ? "" : project.getName()) + keyWord;
+        String encryptStr = AesCryptoUtil.encrypt(key.getBytes(), keyBytes, ivBytes);
+        return encryptStr.replaceAll("\n", "");
     }
 
     private ClassInfo parseClassInfoFromDataContext(DataContext context) {
@@ -138,7 +161,7 @@ public class SwapThisClass extends AnAction {
 
     private static String renderHotSwapScriptWithTemplate(ClassLoader classLoader, ClassInfo currentClassInfo) throws Exception {
         String hotSwapScript4OneClass = IoUtil.getResourceFile(classLoader, "/scripts/template/HotSwapScript4OneClass.sh");
-        Map<String, Object> params = new HashMap<>();
+        Map<String, Object> params = new HashMap<>(3);
         params.put("className", currentClassInfo.getSimpleName());
         params.put("currentClassOssUrl", currentClassInfo.getCurrentClassOssUrl());
         StringSubstitutor s = new StringSubstitutor(params);
