@@ -61,14 +61,14 @@ public class ClassInfo {
 
     @Override
     public String toString() {
-        return "classInfo:{" +
-                "classType: " + classType + ",\n" +
-                "projectBasePath: " + projectBasePath + ",\n" +
-                "simpleName: " + simpleName + ",\n" +
-                "qualifiedName: " + qualifiedName + ",\n" +
-                "classPath: " + classPath + ",\n" +
-                "currentClassOssUrl: " + currentClassOssUrl + ",\n" +
-                "}";
+        return "classInfo:{\n" +
+            "   classType: " + classType + ",\n" +
+            "   projectBasePath: " + projectBasePath + ",\n" +
+            "   simpleName: " + simpleName + ",\n" +
+            "   qualifiedName: " + qualifiedName + ",\n" +
+            "   classPath: " + classPath + ",\n" +
+            "   currentClassOssUrl: " + currentClassOssUrl + ",\n" +
+            "}";
     }
 
     public String getClassType() {
