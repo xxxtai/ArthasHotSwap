@@ -21,6 +21,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static com.xxxtai.arthas.constants.CommonConstants.PATH_SEPARATOR;
+import static com.xxxtai.arthas.constants.CommonConstants.SRC_PATH_TOKEN;
+import static com.xxxtai.arthas.constants.CommonConstants.TARGET_CLASS_PATH_TOKEN;
 
 public class SwapThisClass extends AnAction {
 
@@ -34,13 +36,15 @@ public class SwapThisClass extends AnAction {
             ClassInfo currentClassInfo = parseClassInfoFromDataContext(dataContext);
             byte[] currentClassBytes = findTheSwapClass(currentClassInfo);
             if (currentClassBytes == null) {
-                NotifyUtil.error(project, currentClassInfo.toString() + "\n" + "the class of " + currentClassInfo.getClassPath() + " can not be found");
+                NotifyUtil.error(project,
+                    currentClassInfo.toString() + "\n" + "the class of " + currentClassInfo.getClassPath() + " can not be found");
                 return;
             }
 
             EncryptInfo encryptInfo = encryptTheSwapClass(currentClassBytes);
 
-            Result<String> uploadCurrentClassResult = ossFacade.uploadString(currentClassInfo.getSimpleName(), encryptInfo.getEncryptContent());
+            Result<String> uploadCurrentClassResult = ossFacade.uploadString(currentClassInfo.getSimpleName(),
+                encryptInfo.getEncryptContent());
             if (!uploadCurrentClassResult.isSuccess()) {
                 NotifyUtil.error(project, uploadCurrentClassResult.getErrorMsg());
                 return;
@@ -54,12 +58,14 @@ public class SwapThisClass extends AnAction {
                 return;
             }
 
-            String command = String.format("curl -L %s | sh -s %s %s", uploadHotSwapScriptResult.getValue(), encryptInfo.getKey(), encryptInfo.getIv());
+            String command = String.format("curl -L %s | sh -s %s %s", uploadHotSwapScriptResult.getValue(), encryptInfo.getKey(),
+                encryptInfo.getIv());
             ClipboardUtils.setClipboardString(command);
             NotifyUtil.error(project,
-                    "command:" + command + "\n" +
-                            currentClassInfo.toString());
-            NotifyUtil.notifyMessage(project, "the command of hot swap has been copied to the clipboard, go to the host to execute the command");
+                "command:" + command + "\n" +
+                    currentClassInfo.toString());
+            NotifyUtil.notifyMessage(project,
+                "the command of hot swap has been copied to the clipboard, go to the host to execute the command");
         } catch (Exception t) {
             NotifyUtil.error(project, StringUtils.isNotBlank(t.getMessage()) ? t.getMessage() : "Internal exception");
             t.printStackTrace();
@@ -94,15 +100,12 @@ public class SwapThisClass extends AnAction {
             return classInfo;
         }
 
-        Module module = ModuleUtil.findModuleForFile(psiFile.getVirtualFile(), project);
-        classInfo.setBelongedModuleName(module == null ? "" : module.getName());
-
         PsiElement psiElement = CommonDataKeys.PSI_ELEMENT.getData(context);
         if (!(psiElement instanceof PsiClass)) {
             throw new RuntimeException("Please put the mouse cursor on the class name");
         }
 
-        PsiClass psiClass = (PsiClass) psiElement;
+        PsiClass psiClass = (PsiClass)psiElement;
         classInfo.setSimpleName(psiClass.getName());
         classInfo.setQualifiedName(psiClass.getQualifiedName());
         return classInfo;
@@ -111,10 +114,11 @@ public class SwapThisClass extends AnAction {
     private byte[] findTheSwapClass(ClassInfo classInfo) throws Exception {
         String filePath;
         if (ClassIdentity.Type.SOURCE.equals(classInfo.getClassType())) {
-            String projectBasePath = classInfo.getProjectBasePath();
-            filePath = projectBasePath + PATH_SEPARATOR + classInfo.getBelongedModuleName() + "/target/classes/" +
-                    classInfo.getQualifiedName().replaceAll("\\.", PATH_SEPARATOR) +
-                    ClassIdentity.Suffix.CLASS;
+            String[] paths = classInfo.getClassPath().split(SRC_PATH_TOKEN);
+            filePath = paths[0] +
+                TARGET_CLASS_PATH_TOKEN +
+                classInfo.getQualifiedName().replaceAll("\\.", PATH_SEPARATOR) +
+                ClassIdentity.Suffix.CLASS;
         } else {
             filePath = classInfo.getClassPath();
         }
