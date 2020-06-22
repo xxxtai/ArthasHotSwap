@@ -41,7 +41,7 @@ public class OssFacadeImpl implements OssFacade {
 
             return Result.buildSuccessResult(ossInfo.objectAccessUrlPrefix + CommonConstants.PATH_SEPARATOR + key);
         } catch (ClientException e) {
-            MyToolWindow.getInstance().getjTextArea().append(IoUtil.printStackTrace(e));
+            MyToolWindow.consoleLog(IoUtil.printStackTrace(e));
             return Result.buildErrorResult("Please check your network");
         }
     }

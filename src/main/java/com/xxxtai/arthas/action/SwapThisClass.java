@@ -69,19 +69,17 @@ public class SwapThisClass extends AnAction {
             notifyResult(project, currentClassInfo, command);
         } catch (Throwable t) {
             NotifyUtil.error(project, "Internal exception : " + t.getMessage());
-            MyToolWindow.getInstance().getjTextArea().append(IoUtil.printStackTrace(t));
+            MyToolWindow.consoleLog(IoUtil.printStackTrace(t));
         }
     }
 
     private void notifyResult(Project project, ClassInfo currentClassInfo, String command) {
-        JTextArea jTextArea = MyToolWindow.getInstance().getjTextArea();
-
-        jTextArea.append("\n" + currentClassInfo.toString());
-        jTextArea.append("\n\n************************************************ The following string is the command of hot swap ************************************************");
-        jTextArea.append("\n");
-        jTextArea.append("\n" + command);
-        jTextArea.append("\n");
-        jTextArea.append("\n********************************* Copy this command, and then go to the host to execute the command ***********************************************\n\n");
+        MyToolWindow.consoleLog( currentClassInfo.toString());
+        MyToolWindow.consoleLog("************************************************ The following string is the command of hot swap ************************************************" +
+                "\n" +
+                "\n" + command +
+                "\n" +
+                "\n********************************* Copy this command, and then go to the host to execute the command ***********************************************\n\n");
 
         NotifyUtil.notifyMessage(project,
             "Arthas Hot Swap Tip : the command of hot swap has been copied to the clipboard, go to the host to execute the command");
@@ -92,7 +90,7 @@ public class SwapThisClass extends AnAction {
         byte[] ivBytes = AesCryptoUtil.generalRandomBytes(16);
         String key = (project == null ? "" : project.getName()) + keyWord;
         String encryptStr = AesCryptoUtil.encrypt(key.getBytes(), keyBytes, ivBytes);
-        return encryptStr.replaceAll("\n", "");
+        return encryptStr.replaceAll("[\n/+]", "x");
     }
 
     private ClassInfo parseClassInfoFromDataContext(DataContext context) {

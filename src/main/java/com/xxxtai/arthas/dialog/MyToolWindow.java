@@ -22,7 +22,7 @@ public class MyToolWindow {
         caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
 
         JBScrollPane scrollPane = new JBScrollPane();
-        scrollPane.setPreferredSize(new Dimension((int)screenSize.getWidth() - 35, (int)screenSize.getHeight() / 8 * 3 - 35));
+        scrollPane.setPreferredSize(new Dimension((int)screenSize.getWidth() - 65, (int)screenSize.getHeight() / 8 * 3 - 35));
         scrollPane.setVisible(true);
         scrollPane.getVerticalScrollBar().setUnitIncrement(15);
         scrollPane.getVerticalScrollBar().setDoubleBuffered(true);
@@ -30,7 +30,7 @@ public class MyToolWindow {
         scrollPane.setViewportView(jTextArea);
 
         mainPanel = new JPanel();
-        mainPanel.setPreferredSize(new Dimension((int)screenSize.getWidth() - 35, (int)screenSize.getHeight() / 8 * 3));
+        mainPanel.setPreferredSize(new Dimension((int)screenSize.getWidth() - 65, (int)screenSize.getHeight() / 8 * 3));
         mainPanel.add(scrollPane);
     }
 
@@ -38,8 +38,12 @@ public class MyToolWindow {
         return mainPanel;
     }
 
-    public JTextArea getjTextArea() {
+    public JTextArea getJTextArea() {
         return jTextArea;
+    }
+
+    public static void consoleLog(String content) {
+        getInstance().getJTextArea().append("\n  >> " + content.replaceAll("\n", "\n     "));
     }
 
     public static MyToolWindow getInstance() {
