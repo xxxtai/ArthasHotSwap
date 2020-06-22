@@ -9,6 +9,7 @@ import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
 public class AesCryptoUtil {
+
     public static String encrypt(String sSrc, String sKey, String sIv) {
         try {
             byte[] keyBytes = StringUtil.hex2Bytes(sKey);
@@ -31,7 +32,7 @@ public class AesCryptoUtil {
             return new String(formatWithLineBreak(origin.getBytes(), 64));
         } catch (Exception e) {
             e.printStackTrace();
-            return null;
+            return "";
         }
     }
 
