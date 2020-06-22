@@ -15,8 +15,6 @@ public class ClassInfo {
 
     private String qualifiedName;
 
-    private String belongedModuleName;
-
     private String classPath;
 
     private String currentClassOssUrl;
@@ -35,14 +33,6 @@ public class ClassInfo {
 
     public void setQualifiedName(String qualifiedName) {
         this.qualifiedName = qualifiedName;
-    }
-
-    public String getBelongedModuleName() {
-        return belongedModuleName;
-    }
-
-    public void setBelongedModuleName(String belongedModuleName) {
-        this.belongedModuleName = belongedModuleName;
     }
 
     public String getClassPath() {
@@ -76,7 +66,6 @@ public class ClassInfo {
                 "projectBasePath: " + projectBasePath + ",\n" +
                 "simpleName: " + simpleName + ",\n" +
                 "qualifiedName: " + qualifiedName + ",\n" +
-                "belongedModuleName: " + belongedModuleName + ",\n" +
                 "classPath: " + classPath + ",\n" +
                 "currentClassOssUrl: " + currentClassOssUrl + ",\n" +
                 "}";
