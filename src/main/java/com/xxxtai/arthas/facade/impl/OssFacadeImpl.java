@@ -9,9 +9,11 @@ import com.aliyun.oss.model.ObjectMetadata;
 import com.aliyun.oss.model.PutObjectRequest;
 import com.aliyun.oss.model.StorageClass;
 import com.xxxtai.arthas.constants.CommonConstants;
+import com.xxxtai.arthas.dialog.MyToolWindow;
 import com.xxxtai.arthas.domain.AppSettingsState;
 import com.xxxtai.arthas.domain.Result;
 import com.xxxtai.arthas.facade.OssFacade;
+import com.xxxtai.arthas.utils.IoUtil;
 
 import java.io.ByteArrayInputStream;
 
@@ -39,7 +41,7 @@ public class OssFacadeImpl implements OssFacade {
 
             return Result.buildSuccessResult(ossInfo.objectAccessUrlPrefix + CommonConstants.PATH_SEPARATOR + key);
         } catch (ClientException e) {
-            e.printStackTrace();
+            MyToolWindow.getInstance().getjTextArea().append(IoUtil.printStackTrace(e));
             return Result.buildErrorResult("Please check your network");
         }
     }
