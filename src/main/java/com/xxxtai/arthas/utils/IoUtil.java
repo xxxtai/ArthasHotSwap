@@ -3,6 +3,8 @@ package com.xxxtai.arthas.utils;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 
+import com.xxxtai.arthas.dialog.MyToolWindow;
+
 public class IoUtil {
 
     public static String getResourceFile(ClassLoader classLoader, String filePath) throws Exception {
@@ -36,5 +38,18 @@ public class IoUtil {
             }
             return byteArrayOutputStream.toByteArray();
         }
+    }
+
+    public static String printStackTrace(Throwable t) {
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        PrintStream printStream = new PrintStream(byteArrayOutputStream);
+        t.printStackTrace(printStream);
+        try {
+            printStream.close();
+            byteArrayOutputStream.close();
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        }
+        return new String(byteArrayOutputStream.toByteArray());
     }
 }
