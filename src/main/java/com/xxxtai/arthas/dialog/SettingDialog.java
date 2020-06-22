@@ -19,10 +19,10 @@ public class SettingDialog implements Configurable {
         return "ArthasHotSwap";
     }
 
-    @Override
-    public JComponent getPreferredFocusedComponent() {
-        return mySettingsComponent.getPreferredFocusedComponent();
-    }
+    //@Override
+    //public JComponent getPreferredFocusedComponent() {
+    //    return mySettingsComponent.getPreferredFocusedComponent();
+    //}
 
     @Nullable
     @Override
