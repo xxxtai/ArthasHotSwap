@@ -19,6 +19,8 @@
          on how to target different products -->
     <depends>com.intellij.modules.platform</depends>
 
+    <idea-version since-build="162"/>
+
     <extensions defaultExtensionNs="com.intellij">
         <applicationConfigurable parentId="tools" instance="com.xxxtai.arthas.dialog.SettingDialog"
                                  id="com.xxxtai.arthas.dialog.SettingDialog" displayName="Arthas Hot Swap"/>
@@ -32,10 +34,14 @@
                 description="arthas hot swap">
         </action>
 
-        <group id="arthas-plugin" popup="true" text="Arthas Hot Swap">
+        <group id="arthas-hot-swap-plugin" popup="true" text="Arthas Hot Swap">
             <add-to-group group-id="EditorPopupMenu" anchor="after" relative-to-action="CopyReference"/>
             <separator/>
             <reference ref="swapThisClass"/>
         </group>
+        <!--<action id="swapThisClass" class="com.xxxtai.arthas.action.SwapThisClass" text="Swap This Class" description="arthas hot swap">-->
+            <!--<add-to-group group-id="EditorPopupMenu" anchor="first"/>-->
+            <!--<keyboard-shortcut keymap="$default" first-keystroke="shift meta S"/>-->
+        <!--</action>-->
     </actions>
 </idea-plugin>
