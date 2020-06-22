@@ -1,6 +1,5 @@
 package com.xxxtai.arthas.utils;
 
-import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.Random;
@@ -28,11 +27,38 @@ public class AesCryptoUtil {
             Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
             cipher.init(Cipher.ENCRYPT_MODE, sKeySpec, iv);
             byte[] encrypted = cipher.doFinal(contentBytes);
-            return Base64.getEncoder().encodeToString(encrypted) + "\n";
+            String origin = Base64.getEncoder().encodeToString(encrypted);
+            return new String(formatWithLineBreak(origin.getBytes(), 64));
         } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
+    }
+
+    private static byte[] formatWithLineBreak(byte[] origin, int lineLength) {
+        byte lineBreak = '\n';
+        int lineSum = origin.length / lineLength;
+        int mod = origin.length % lineLength;
+        lineSum = mod == 0 ? lineSum : lineSum + 1;
+        byte[] bytesWithLineBreak = new byte[origin.length + lineSum];
+        int lineCount = 0;
+        for (int i = 0; i < bytesWithLineBreak.length; i++) {
+            boolean isEnd = false;
+            if (i == bytesWithLineBreak.length - 1 ) {
+                isEnd = true;
+            }
+
+            if (((lineCount + 1) * (lineLength + 1) - 1) == i) {
+                isEnd = i != lineCount;
+            }
+            if (isEnd) {
+                bytesWithLineBreak[i] = lineBreak;
+                lineCount++;
+                continue;
+            }
+            bytesWithLineBreak[i] = origin[i - lineCount];
+        }
+        return bytesWithLineBreak;
     }
 
     public static byte[] generalRandomBytes(int size) {
