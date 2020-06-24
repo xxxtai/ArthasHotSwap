@@ -26,14 +26,14 @@ public class IoUtil {
     public static byte[] getTargetClass(String filePath) throws Exception {
         File file = new File(filePath);
         if (!file.exists()) {
-            throw new RuntimeException("the file of " + filePath + " does not exist ");
+            return null;
         }
         try (BufferedInputStream bufferedInputStream = new BufferedInputStream(new FileInputStream(file))) {
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream((int) file.length());
-            int buf_size = 1024;
-            byte[] buffer = new byte[buf_size];
+            int bufSize = 1024;
+            byte[] buffer = new byte[bufSize];
             int len;
-            while ((len = bufferedInputStream.read(buffer, 0, buf_size)) > 0) {
+            while ((len = bufferedInputStream.read(buffer, 0, bufSize)) > 0) {
                 byteArrayOutputStream.write(buffer, 0, len);
             }
             return byteArrayOutputStream.toByteArray();
