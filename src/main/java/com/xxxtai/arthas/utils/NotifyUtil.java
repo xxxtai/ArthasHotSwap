@@ -27,6 +27,6 @@ public class NotifyUtil {
 
     public static void error(Project project, String errorMsg) {
         Messages.showMessageDialog(project, errorMsg,
-                "Arthas Hot Swap", Messages.getInformationIcon());
+                "Arthas Hot Swap", Messages.getErrorIcon());
     }
 }
