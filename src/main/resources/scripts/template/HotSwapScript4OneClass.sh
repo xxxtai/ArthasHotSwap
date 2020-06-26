@@ -32,10 +32,20 @@ fi
 
 cd ./arthas-hot-swap
 
+rm -f /tmp/arthas-hot-swap-result
+
+openssl version
+if [[ $? -eq 0 ]]; then
+    echo " openssl has been installed successfully "
+else
+    echo " openssl is not installed, and installation were start next "
+    sudo yum install openssl openssl-devel
+fi
+
 curl  ${currentClassOssUrl} >> encrypt-${className}.txt
 openssl enc -aes-128-cbc -a -d -in encrypt-${className}.txt -out ${className}.class -K $1 -iv $2
 
-curl -L https://alibaba.github.io/arthas/install.sh | sh
+curl -L http://gjusp.alicdn.com/jucube/arthas-install.sh | sh
 
 rm -f tmp_in
 mknod tmp_in p
@@ -46,10 +56,15 @@ sleep 2s
 echo "1" >> tmp_in
 
 sleep 2s
-echo "redefine $(pwd)/${className}.class" >> tmp_in
+echo "redefine $(pwd)/${className}.class > /tmp/arthas-hot-swap-result" >> tmp_in
 
-sleep 2s
-echo "
+echo "q" >> tmp_in
+sleep 1s
+
+swapResult=$(cat /tmp/arthas-hot-swap-result | grep "success")
+echo $swapResult
+if [[ $swapResult != "" ]]
+then
 echo '
 ************************* The following files were successfully hot deployed *****************************
 ***
@@ -57,7 +72,12 @@ echo '
 ***
 ***********************************************************************************************************
 '
-"
-
-sleep 2s
-echo "stop" >> tmp_in
+else
+echo '
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Failed to hot deployed the following files %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%
+%%% ${className}.class
+%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+'
+fi
