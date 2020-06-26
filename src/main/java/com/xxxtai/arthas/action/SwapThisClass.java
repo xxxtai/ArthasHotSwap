@@ -38,7 +38,7 @@ public class SwapThisClass extends AnAction {
             if (currentClassBytes == null) {
                 NotifyUtil.error(project,
                     "Please compile the file first ! "
-                        + "\nCan't find the class:" + currentClassInfo.getClassPath());
+                        + "\nCan't find the class of the source file : " + currentClassInfo.getClassPath());
                 return;
             }
 
@@ -62,7 +62,9 @@ public class SwapThisClass extends AnAction {
                 return;
             }
 
-            String command = String.format("curl -L %s | sh -s %s %s", uploadHotSwapScriptResult.getValue(), encryptInfo.getKey(),
+            String command = String.format("sudo curl -L %s  > HotSwapScript4OneClass.sh ; "
+                    + "chmod +x HotSwapScript4OneClass.sh; "
+                    + "./HotSwapScript4OneClass.sh  %s %s", uploadHotSwapScriptResult.getValue(), encryptInfo.getKey(),
                 encryptInfo.getIv());
             ClipboardUtils.setClipboardString(command);
 
