@@ -16,6 +16,7 @@ public class AppSettingsComponent {
     private final JBTextField ossEndpointText = new JBTextField();
     private final JBTextField ossAccessKeyIdText = new JBTextField();
     private final JBTextField ossAccessKeySecretText = new JBTextField();
+    private final JBTextField bucketNameText = new JBTextField();
 
 
     public AppSettingsComponent() {
@@ -23,6 +24,7 @@ public class AppSettingsComponent {
                 .addLabeledComponent(new JBLabel("Enter OSS Endpoint: "), ossEndpointText, 1, false)
                 .addLabeledComponent(new JBLabel("Enter OSS AccessKeyId: "), ossAccessKeyIdText, 1, false)
                 .addLabeledComponent(new JBLabel("Enter OSS AccessKeySecret: "), ossAccessKeySecretText, 1, false)
+                .addLabeledComponent(new JBLabel("Enter OSS BucketName: "), bucketNameText, 1, false)
                 .addComponentFillVertically(new JPanel(), 0)
                 .getPanel();
     }
@@ -60,5 +62,14 @@ public class AppSettingsComponent {
     @NotNull
     public String getOssAccessKeySecretText() {
         return ossAccessKeySecretText.getText();
+    }
+
+    @NotNull
+    public String getBucketNameText() {
+        return bucketNameText.getText();
+    }
+
+    public void setBucketNameText(String newText) {
+        bucketNameText.setText(newText);
     }
 }
