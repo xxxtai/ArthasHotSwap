@@ -4,7 +4,7 @@ plugins {
 }
 
 group 'com.xxxtai.arthas'
-version '1.0-SNAPSHOT'
+version '1.0-RELEASE'
 
 sourceCompatibility = 1.8
 
@@ -28,6 +28,10 @@ intellij {
 }
 patchPluginXml {
     changeNotes """
-      waiting for stable version.<br>
-      <em>waiting for stable version</em>"""
+      <p>1.0-RELEASE</p>
+      <ul>
+        <li> support swap one class file </li>
+      </ul>
+
+"""
 }
