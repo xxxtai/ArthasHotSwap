@@ -18,7 +18,6 @@ import com.xxxtai.arthas.utils.IoUtil;
 import java.io.ByteArrayInputStream;
 
 public class OssFacadeImpl implements OssFacade {
-    private static final String BUCKET_NAME = "arthas-hot-swap";
 
     @Override
     public Result<String> uploadString(String key, String content) {
@@ -29,7 +28,7 @@ public class OssFacadeImpl implements OssFacade {
         OssInfo ossInfo = parseResult.getValue();
         try {
             OSS ossClient = new OSSClientBuilder().build(ossInfo.endpoint, ossInfo.accessKeyId, ossInfo.accessKeySecret);
-            PutObjectRequest putObjectRequest = new PutObjectRequest(BUCKET_NAME, key, new ByteArrayInputStream(content.getBytes()));
+            PutObjectRequest putObjectRequest = new PutObjectRequest(ossInfo.bucketName, key, new ByteArrayInputStream(content.getBytes()));
 
             ObjectMetadata metadata = new ObjectMetadata();
             metadata.setHeader(OSSHeaders.OSS_STORAGE_CLASS, StorageClass.Standard.toString());
@@ -55,8 +54,9 @@ public class OssFacadeImpl implements OssFacade {
         ossInfo.endpoint = settings.endpoint;
         ossInfo.accessKeyId = settings.accessKeyId;
         ossInfo.accessKeySecret = settings.accessKeySecret;
+        ossInfo.bucketName = settings.bucketName;
         String[] urlParts = settings.endpoint.split(CommonConstants.URL_SEPARATOR);
-        ossInfo.objectAccessUrlPrefix = urlParts[0] + CommonConstants.URL_SEPARATOR + BUCKET_NAME + "." + urlParts[1];
+        ossInfo.objectAccessUrlPrefix = urlParts[0] + CommonConstants.URL_SEPARATOR + settings.bucketName + "." + urlParts[1];
         return Result.buildSuccessResult(ossInfo);
     }
 
@@ -65,6 +65,7 @@ public class OssFacadeImpl implements OssFacade {
         String accessKeyId;
         String accessKeySecret;
         String objectAccessUrlPrefix;
+        String bucketName;
 
         @Override
         public String toString() {
@@ -73,6 +74,7 @@ public class OssFacadeImpl implements OssFacade {
                     "accessKeyId:" + accessKeyId + "\n" +
                     "accessKeySecret:" + accessKeySecret + "\n" +
                     "objectAccessUrlPrefix:" + objectAccessUrlPrefix + "\n" +
+                    "bucketName:" + bucketName + "\n" +
                     "}";
         }
     }
