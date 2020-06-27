@@ -22,6 +22,7 @@ public class AppSettingsState implements PersistentStateComponent<AppSettingsSta
     public String endpoint = "endpoint";
     public String accessKeyId = "your accessKeyId";
     public String accessKeySecret = "your accessKeySecret";
+    public String bucketName = "arthas-hot-swap";
 
 
     public static AppSettingsState getInstance() {
