@@ -36,7 +36,8 @@ public class SettingDialog implements Configurable {
         AppSettingsState settings = AppSettingsState.getInstance();
         return !mySettingsComponent.getOssEndpointText().equals(settings.endpoint)
                 || !mySettingsComponent.getOssAccessKeyIdText().equals(settings.accessKeyId)
-                || !mySettingsComponent.getOssAccessKeySecretText().equals(settings.accessKeySecret);
+                || !mySettingsComponent.getOssAccessKeySecretText().equals(settings.accessKeySecret)
+                || !mySettingsComponent.getBucketNameText().equals(settings.bucketName);
     }
 
     @Override
@@ -51,6 +52,7 @@ public class SettingDialog implements Configurable {
         settings.endpoint = mySettingsComponent.getOssEndpointText();
         settings.accessKeyId = mySettingsComponent.getOssAccessKeyIdText();
         settings.accessKeySecret = mySettingsComponent.getOssAccessKeySecretText();
+        settings.bucketName = mySettingsComponent.getBucketNameText();
     }
 
     @Override
@@ -59,6 +61,7 @@ public class SettingDialog implements Configurable {
         mySettingsComponent.setOssEndpointText(settings.endpoint);
         mySettingsComponent.setOssAccessKeyIdText(settings.accessKeyId);
         mySettingsComponent.setOssAccessKeySecretText(settings.accessKeySecret);
+        mySettingsComponent.setBucketNameText(settings.bucketName);
     }
 
     @Override
