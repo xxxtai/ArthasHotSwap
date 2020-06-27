@@ -20,41 +20,48 @@ echo "
                                                                       | \$\$
                                                                       |__/
 "
+echo "************************************************** 1. Prepare the workspace **********************************************************"
 if [ ! -d "./arthas-hot-swap" ]
 then
   mkdir ./arthas-hot-swap
-  echo "mkdir ./arthas-hot-swap success"
+  echo "******* mkdir ./arthas-hot-swap success"
 else
   rm -rf ./arthas-hot-swap
   mkdir ./arthas-hot-swap
-  echo "./arthas-hot-swap exists, delete the directory first, and then create a new one"
+  echo "******* ./arthas-hot-swap exists, delete the directory first, and then create a new one"
 fi
-
 cd ./arthas-hot-swap
-
 rm -f /tmp/arthas-hot-swap-result
 
+echo "**************************************************** 2. install openssl **************************************************************"
 openssl version
 if [[ $? -eq 0 ]]; then
-    echo " openssl has been installed successfully "
+    echo "*******  openssl has been installed successfully "
 else
-    echo " openssl is not installed, and installation were start next "
+    echo "*******  openssl is not installed, and installation were start next "
     sudo yum install openssl openssl-devel
 fi
 
+echo "********************************************* 3. Download the encrypted file *********************************************************"
 curl  ${currentClassOssUrl} >> encrypt-${className}.txt
+
+echo "************************************************* 4. Encrypt the file ****************************************************************"
 openssl enc -aes-128-cbc -a -d -in encrypt-${className}.txt -out ${className}.class -K $1 -iv $2
 
+echo "************************************************* 5. Install arthas ******************************************************************"
 curl -L http://gjusp.alicdn.com/jucube/arthas-install.sh | sh
 
+echo "************************************************* 6. Create a pipeline ***************************************************************"
 rm -f tmp_in
 mknod tmp_in p
 exec 8<> tmp_in
 ./as.sh <&8 &
 
+echo "********************************************* 7. Choose the java process *************************************************************"
 sleep 2s
 echo "1" >> tmp_in
 
+echo "*********************************************** 8. Redefine the class ****************************************************************"
 sleep 2s
 echo "redefine $(pwd)/${className}.class > /tmp/arthas-hot-swap-result" >> tmp_in
 
@@ -66,18 +73,19 @@ echo $swapResult
 if [[ $swapResult != "" ]]
 then
 echo '
-************************* The following files were successfully hot deployed *****************************
-***
-*** ${className}.class
-***
-***********************************************************************************************************
+****************************************** 9. The following files were successfully hot deployed *******************************************
+*****
+***** ${className}.class
+*****
+********************************************************************************************************************************************
 '
 else
 echo '
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Failed to hot deployed the following files %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%
-%%% ${className}.class
-%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 9. Failed to hot deployed the following files %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%
+%%%%% ${className}.class
+%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 '
+cat /tmp/arthas-hot-swap-result
 fi
