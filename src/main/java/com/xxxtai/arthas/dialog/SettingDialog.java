@@ -16,13 +16,8 @@ public class SettingDialog implements Configurable {
     @Nls(capitalization = Nls.Capitalization.Title)
     @Override
     public String getDisplayName() {
-        return "ArthasHotSwap";
+        return "Arthas Hot Swap";
     }
-
-    //@Override
-    //public JComponent getPreferredFocusedComponent() {
-    //    return mySettingsComponent.getPreferredFocusedComponent();
-    //}
 
     @Nullable
     @Override
@@ -37,6 +32,7 @@ public class SettingDialog implements Configurable {
         return !mySettingsComponent.getOssEndpointText().equals(settings.endpoint)
                 || !mySettingsComponent.getOssAccessKeyIdText().equals(settings.accessKeyId)
                 || !mySettingsComponent.getOssAccessKeySecretText().equals(settings.accessKeySecret)
+                || !mySettingsComponent.getJvmIndex().equals(settings.jvmIndex)
                 || !mySettingsComponent.getBucketNameText().equals(settings.bucketName);
     }
 
@@ -53,6 +49,7 @@ public class SettingDialog implements Configurable {
         settings.accessKeyId = mySettingsComponent.getOssAccessKeyIdText();
         settings.accessKeySecret = mySettingsComponent.getOssAccessKeySecretText();
         settings.bucketName = mySettingsComponent.getBucketNameText();
+        settings.jvmIndex = mySettingsComponent.getJvmIndex();
     }
 
     @Override
@@ -62,6 +59,7 @@ public class SettingDialog implements Configurable {
         mySettingsComponent.setOssAccessKeyIdText(settings.accessKeyId);
         mySettingsComponent.setOssAccessKeySecretText(settings.accessKeySecret);
         mySettingsComponent.setBucketNameText(settings.bucketName);
+        mySettingsComponent.setJvmIndex(settings.jvmIndex);
     }
 
     @Override
