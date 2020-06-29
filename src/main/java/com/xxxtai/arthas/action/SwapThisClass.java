@@ -7,6 +7,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.xxxtai.arthas.constants.ClassIdentity;
 import com.xxxtai.arthas.dialog.MyToolWindow;
+import com.xxxtai.arthas.domain.AppSettingsState;
 import com.xxxtai.arthas.domain.ClassInfo;
 import com.xxxtai.arthas.domain.EncryptInfo;
 import com.xxxtai.arthas.domain.Result;
@@ -18,7 +19,6 @@ import org.apache.commons.text.StringSubstitutor;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.swing.*;
 
 import static com.xxxtai.arthas.constants.CommonConstants.PATH_SEPARATOR;
 import static com.xxxtai.arthas.constants.CommonConstants.SRC_PATH_TOKEN;
@@ -160,10 +160,13 @@ public class SwapThisClass extends AnAction {
     }
 
     private static String renderHotSwapScriptWithTemplate(ClassLoader classLoader, ClassInfo currentClassInfo) throws Exception {
+        AppSettingsState settings = AppSettingsState.getInstance();
         String hotSwapScript4OneClass = IoUtil.getResourceFile(classLoader, "/scripts/template/HotSwapScript4OneClass.sh");
         Map<String, Object> params = new HashMap<>(3);
         params.put("className", currentClassInfo.getSimpleName());
         params.put("currentClassOssUrl", currentClassInfo.getCurrentClassOssUrl());
+        params.put("jvmIndex", settings.jvmIndex);
+
         StringSubstitutor s = new StringSubstitutor(params);
         return s.replace(hotSwapScript4OneClass);
     }
