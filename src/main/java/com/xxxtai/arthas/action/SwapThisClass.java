@@ -124,13 +124,20 @@ public class SwapThisClass extends AnAction {
         }
 
         PsiElement psiElement = CommonDataKeys.PSI_ELEMENT.getData(context);
-        if (!(psiElement instanceof PsiClass)) {
-            throw new RuntimeException("Please put the mouse cursor on the class name");
-        }
+        try {
+            if (!(psiElement instanceof PsiClass)) {
+                throw new RuntimeException("Please put the mouse cursor on the class name");
+            }
 
-        PsiClass psiClass = (PsiClass)psiElement;
-        classInfo.setSimpleName(psiClass.getName());
-        classInfo.setQualifiedName(psiClass.getQualifiedName());
+            PsiClass psiClass = (PsiClass)psiElement;
+            classInfo.setSimpleName(psiClass.getName());
+            classInfo.setQualifiedName(psiClass.getQualifiedName());
+        } catch (Throwable t) {
+            String substring = classInfo.getClassPath().substring(0, classInfo.getClassPath().length() - 5);
+            String[] arr = substring.split("/");
+            classInfo.setSimpleName(arr[arr.length - 1]);
+            classInfo.setQualifiedName(substring.split("/java/")[1].replaceAll("/", "."));
+        }
         return classInfo;
     }
 
