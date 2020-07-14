@@ -58,15 +58,16 @@ exec 8<> tmp_in
 ./as.sh <&8 &
 
 echo "********************************************* 7. Choose the java process *************************************************************"
-sleep 2s
-echo "${jvmIndex}" >> tmp_in
+sleep 1s
+echo "
+" >> tmp_in
 
 echo "*********************************************** 8. Redefine the class ****************************************************************"
-sleep 2s
+sleep 3s
 echo "redefine $(pwd)/${className}.class > /tmp/arthas-hot-swap-result" >> tmp_in
-
+sleep 4s
 echo "q" >> tmp_in
-sleep 1s
+sleep 2s
 
 swapResult=$(cat /tmp/arthas-hot-swap-result | grep "success")
 echo $swapResult
@@ -89,3 +90,4 @@ echo '
 '
 cat /tmp/arthas-hot-swap-result
 fi
+
