@@ -11,11 +11,9 @@ This repo is a plugin of Intellij IDEA that can help you achieve hot deployment 
 3. 选择需要热部署的java源文件或者class文件，在类名上单击右键，选择“Arthas Hot Swap”的“Swap this class”，插件后台执行成功后会把热部署需要的命令复制到粘贴板。
 4. 登录远程服务器，粘贴热部署命令并执行，热部署完成，该机器运行着最新的class。机器第一次执行热部署命令，可能失败，再执行一次试下。
 
-![第一步：选择Arthas Hot Swap插件选项](https://ata2-img.oss-cn-zhangjiakou.aliyuncs.com/bc6b14b1a24226f83ca019b43d1c986b.png)
-
-![第二步：登录远程服务器粘贴命令并执行](https://ata2-img.oss-cn-zhangjiakou.aliyuncs.com/8cf9c577d28104b75df6804183d8d0c9.png)
-
-![第三步：执行完成，热部署成功](https://ata2-img.oss-cn-zhangjiakou.aliyuncs.com/ff42a488e0a3c2c7aee5e0d1874fadea.png)
+![第一步：选择Arthas Hot Swap插件选项](https://ata2-img.oss-cn-zhangjiakou.aliyuncs.com/b47d34513f1d4c53f4fd309464ef37b7.jpg)
+![第二步：登录远程服务器粘贴命令并执行](https://ata2-img.oss-cn-zhangjiakou.aliyuncs.com/cb7c29f73c18e591a8f41b5e96604aa2.jpg)
+![第三步：执行完成，热部署成功](https://ata2-img.oss-cn-zhangjiakou.aliyuncs.com/72da7f245be92b8e80efc1967f5805cd.jpg)
 
 ## Q&A
 Q: 热部署有什么限制吗？
