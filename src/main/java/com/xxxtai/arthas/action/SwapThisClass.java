@@ -2,7 +2,6 @@ package com.xxxtai.arthas.action;
 
 import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.xxxtai.arthas.constants.ClassIdentity;
@@ -122,22 +121,10 @@ public class SwapThisClass extends AnAction {
             classInfo.setSimpleName(fileName.substring(0, fileName.length() - ClassIdentity.Suffix.CLASS.length()));
             return classInfo;
         }
-
-        PsiElement psiElement = CommonDataKeys.PSI_ELEMENT.getData(context);
-        try {
-            if (!(psiElement instanceof PsiClass)) {
-                throw new RuntimeException("Please put the mouse cursor on the class name");
-            }
-
-            PsiClass psiClass = (PsiClass)psiElement;
-            classInfo.setSimpleName(psiClass.getName());
-            classInfo.setQualifiedName(psiClass.getQualifiedName());
-        } catch (Throwable t) {
-            String substring = classInfo.getClassPath().substring(0, classInfo.getClassPath().length() - 5);
-            String[] arr = substring.split("/");
-            classInfo.setSimpleName(arr[arr.length - 1]);
-            classInfo.setQualifiedName(substring.split("/java/")[1].replaceAll("/", "."));
-        }
+        String substring = classInfo.getClassPath().substring(0, classInfo.getClassPath().length() - 5);
+        String[] arr = substring.split("/");
+        classInfo.setSimpleName(arr[arr.length - 1]);
+        classInfo.setQualifiedName(substring.split("/java/")[1].replaceAll("/", "."));
         return classInfo;
     }
 
