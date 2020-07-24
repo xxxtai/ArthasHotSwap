@@ -23,8 +23,10 @@ A: 由于是基于arthas的redefine命令实现的热部署，redefine又是基�
 
 # Arthas Hot Swap插件原理
 [Arthas](https://github.com/alibaba/arthas)是阿里巴巴开源的Java代码诊断工具。Arthas的[redefine命令](https://alibaba.github.io/arthas/redefine.html)是基于Instrumentation API实现的热部署，因此和HotSwap热部署方式一样，有同样的限制。Arthas的redefine命令其实是把Instrumentation API的redefineClasses方法包装后提供给用户，那么我们就可以根据redefine命令发挥想象力，实现热部署。
-Arthas官方文档推荐使用jad/mc/redefine等一连串命令实现class远程热替换，流程大概是：jad命令对老class进行反编译->vim编辑源码->mc命令编译源码->redefine热替换class。这种方式存在两个问题：一是太麻烦，二是mc编译大概率会失败。如果能这样就好，本地修改代码编译后上传class文件到远程服务器，再使用redefine命令热替换class。因此官方文档又推荐，首先将class二进制文件转换成base64编码，然后再复制粘贴到远程服务器，再把base64编码转换成class文件，最后，使用redefine进行热替换。这么麻烦，还不如重新部署呢。Arthas官方推荐的热替换方法最大的问题在于，上传class文件到远程服务器进行热替换的流程太麻烦，那么这些麻烦且固定的流程为何不交给机器来做呢。
-所以，本文推荐的“Arthas Hot Swap”插件就有必要了，该插件就是为了提升使用Arthas进行热替换的效率，几个简单的动作就能热替换一个class文件，可以解决开发过程中80%的热部署需求，剩下的20%用重新部署解决就好了。
+
+Arthas官方文档推荐使用jad/mc/redefine等一连串命令实现class远程热替换，流程大概是：jad命令对老class进行反编译->vim编辑源码->mc命令编译源码->redefine热替换class。这种方式存在两个问题：一是太麻烦，二是mc编译大概率会失败。如果能这样就好，本地修改代码编译后上传class文件到远程服务器，再使用redefine命令热替换class。因此官方文档又推荐，首先将class二进制文件转换成base64编码，然后再复制粘贴到远程服务器，再把base64编码转换成class文件，最后，使用redefine进行热替换。这么麻烦，还不如重新部署呢。
+
+Arthas官方推荐的热替换方法最大的问题在于，上传class文件到远程服务器进行热替换的流程太麻烦，那么这些麻烦且固定的流程为何不交给机器来做呢。所以，本文推荐的“Arthas Hot Swap”插件就有必要了，该插件就是为了提升使用Arthas进行热替换的效率，几个简单的动作就能热替换一个class文件，可以解决开发过程中80%的热部署需求，剩下的20%用重新部署解决就好了。
 
 ## Arthas Hot Swap插件执行流程
 1. 根据用户选择的源文件找到class文件，默认在/target/classes路径下面查找，用户也可以直接选择class文件。
