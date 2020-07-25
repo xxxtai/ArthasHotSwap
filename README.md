@@ -11,12 +11,15 @@ This repo is a plugin of Intellij IDEA that can help you achieve hot deployment 
 4. 登录远程服务器，粘贴热部署命令并执行，热部署完成，该机器运行着最新的class。机器第一次执行热部署命令，可能失败，再执行一次试下。
 
 ![第一步：选择Arthas Hot Swap插件选项](https://ata2-img.oss-cn-zhangjiakou.aliyuncs.com/b47d34513f1d4c53f4fd309464ef37b7.jpg)
+*第一步：选择Arthas Hot Swap插件选项*
 
 ![第二步：登录远程服务器粘贴命令并执行](https://ata2-img.oss-cn-zhangjiakou.aliyuncs.com/cb7c29f73c18e591a8f41b5e96604aa2.jpg)
-
+*第二步：登录远程服务器粘贴命令并执行*
+  
 ![第三步：执行完成，热部署成功](https://ata2-img.oss-cn-zhangjiakou.aliyuncs.com/ff42a488e0a3c2c7aee5e0d1874fadea.png)
+*第三步：执行完成，热部署成功*
 
-## 热部署限制
+## 热部署的限制
 由于是基于Arthas的[redefine](https://alibaba.github.io/arthas/redefine.html)命令实现的热部署，redefine又是基于Instrumentation API实现的热部署，所以和IDEA的debug HotSwap是有一样的限制。限制如下：无法修改类名、方法名，无法修改类属性名称，无法新增类属性，无法新增非静态方法。由于本插件暂时无法获取内部类的class文件，所以暂时不支持修改内部类。
 
 # Arthas Hot Swap插件原理
