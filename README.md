@@ -5,7 +5,7 @@ This repo is a plugin of Intellij IDEA that can help you achieve hot deployment 
 ## 引言
 热部署是帮助开发人员提高效率的利器，如果你的开发语言是java，开发环境是远程服务器，远程服务器debug端口被限制，那么你可能无法通过debug HotSwap实现热部署，那么本文介绍的IntelliJ IDEA插件可以帮助你在远程服务器实现热部署，而且操作简单快捷。本文热部署插件([Arthas Hot Swap](https://github.com/xxxtai/arthas-hotswap))是基于Arthas redefine命令实现的，使用该插件进行远程热部署无需任何配置，无需使用debug端口，只需几个简单动作就能完成。
 ## 使用方法
-1. IntelliJ IDEA安装插件“Arthas Hot Swap”，从[Release](https://github.com/xxxtai/arthas-hotswap/releases)下载安装包。
+1. IntelliJ IDEA安装插件“Arthas Hot Swap”，从[Releases](https://github.com/xxxtai/arthas-hotswap/releases)下载安装包。
 2. 热部署使用的是class文件，所以需要先使用“mvn compile”编译相关工程，后续可以使用IDEA的Recompile编译单个文件，节省编译时间。
 3. 选择需要热部署的java源文件或者class文件，在类名或方法名上单击右键，选择“Arthas Hot Swap”的“Swap this class”，插件后台执行成功后会把热部署需要的命令复制到粘贴板。
 4. 登录远程服务器，粘贴热部署命令并执行，热部署完成，该机器运行着最新的class。机器第一次执行热部署命令，可能失败，再执行一次试下。
