@@ -16,7 +16,8 @@ import org.apache.commons.text.StringSubstitutor;
 import java.util.HashMap;
 import java.util.Map;
 
-
+import static com.xxxtai.arthas.constants.CommonConstants.CLASS_SEPARATOR;
+import static com.xxxtai.arthas.constants.CommonConstants.JAVA_PATH_TOKEN;
 import static com.xxxtai.arthas.constants.CommonConstants.PATH_SEPARATOR;
 import static com.xxxtai.arthas.constants.CommonConstants.SRC_PATH_TOKEN;
 import static com.xxxtai.arthas.constants.CommonConstants.TARGET_CLASS_PATH_TOKEN;
@@ -61,8 +62,7 @@ public class SwapThisClass extends AnAction {
 
             String command = String.format("sudo curl -L %s  > HotSwapScript4OneClass.sh ; "
                     + "chmod +x HotSwapScript4OneClass.sh; "
-                    + "./HotSwapScript4OneClass.sh  %s %s", uploadHotSwapScriptResult.getValue(), encryptInfo.getKey(),
-                encryptInfo.getIv());
+                    + "./HotSwapScript4OneClass.sh  %s %s", uploadHotSwapScriptResult.getValue(), encryptInfo.getKey(), encryptInfo.getIv());
             ClipboardUtils.setClipboardString(command);
 
             notifyResult(project, currentClassInfo, command);
@@ -120,9 +120,10 @@ public class SwapThisClass extends AnAction {
             return classInfo;
         }
         String substring = classInfo.getClassPath().substring(0, classInfo.getClassPath().length() - 5);
-        String[] arr = substring.split("/");
+        String[] arr = substring.split(PATH_SEPARATOR);
         classInfo.setSimpleName(arr[arr.length - 1]);
-        classInfo.setQualifiedName(substring.split("/java/")[1].replaceAll("/", "."));
+        String[] qualifiedNameArray = substring.split(JAVA_PATH_TOKEN);
+        classInfo.setQualifiedName(qualifiedNameArray[qualifiedNameArray.length - 1].replaceAll(PATH_SEPARATOR, CLASS_SEPARATOR));
         return classInfo;
     }
 
