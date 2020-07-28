@@ -26,6 +26,7 @@ public class IoUtil {
     public static byte[] getTargetClass(String filePath) throws Exception {
         File file = new File(filePath);
         if (!file.exists()) {
+            MyToolWindow.consoleLog("The class file can`t found, filePath:" + filePath);
             return null;
         }
         try (BufferedInputStream bufferedInputStream = new BufferedInputStream(new FileInputStream(file))) {
