@@ -13,7 +13,11 @@ public class CommonConstants {
 
     public static final String PATH_SEPARATOR = "/";
 
+    public static final String CLASS_SEPARATOR = ".";
+
     public static final String SRC_PATH_TOKEN = "/src/";
+
+    public static final String JAVA_PATH_TOKEN = "/java/";
 
     public static final String TARGET_CLASS_PATH_TOKEN = "/target/classes/";
 
