@@ -7,7 +7,7 @@ public class CommonConstants {
     public static final String DEFAULT_ENDPOINT = "http://oss-cn-beijing.aliyuncs.com";
     //todo
     public static final String DEFAULT_ACCESS_KEY_ID = "";
-    /todo
+    //todo
     public static final String DEFAULT_ACCESS_KEY_SECRET = "";
     public static final String DEFAULT_BUCKET_NAME = "xxxtai-arthas-hot-swap";
 
