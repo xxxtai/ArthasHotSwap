@@ -62,7 +62,7 @@ public class SwapThisClass extends AnAction {
 
             String command = String.format("sudo curl -L %s  > HotSwapScript4OneClass.sh ; "
                     + "chmod +x HotSwapScript4OneClass.sh; "
-                    + "./HotSwapScript4OneClass.sh  %s %s", uploadHotSwapScriptResult.getValue(), encryptInfo.getKey(), encryptInfo.getIv());
+                    + "yes | ./HotSwapScript4OneClass.sh  %s %s", uploadHotSwapScriptResult.getValue(), encryptInfo.getKey(), encryptInfo.getIv());
             ClipboardUtils.setClipboardString(command);
 
             notifyResult(project, currentClassInfo, command);
