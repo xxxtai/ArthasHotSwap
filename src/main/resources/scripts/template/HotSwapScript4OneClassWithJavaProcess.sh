@@ -1,49 +1,93 @@
-<idea-plugin>
-    <id>com.xxxtai.arthas.arthas-hotswap</id>
-    <name>Arthas Hot Swap</name>
-    <vendor email="xxxtai@163.com" url="https://github.com/xxxtai/arthas-hotswap">moda</vendor>
-    <description><![CDATA[
-    <p> Arthas Hot Swap </p>
-    <ul> 无需安装任何sdk实现远程热部署，提升开发效率利器，使用流程：本地编译->右键选择Arthas Hot Swap->自动生成命令复制到剪切板->登录远程环境粘贴执行命令->热部署成功。</ul>
+#!/usr/bin/env bash
+echo "
+  /\$\$\$\$\$\$              /\$\$     /\$\$
+ /\$\$__  \$\$            | \$\$    | \$\$
+| \$\$  \ \$\$  /\$\$\$\$\$\$  /\$\$\$\$\$\$  | \$\$\$\$\$\$\$   /\$\$\$\$\$\$   /\$\$\$\$\$\$\$
+| \$\$\$\$\$\$\$\$ /\$\$__  \$\$|_  \$\$_/  | \$\$__  \$\$ |____  \$\$ /\$\$_____/
+| \$\$__  \$\$| \$\$  \__/  | \$\$    | \$\$  \ \$\$  /\$\$\$\$\$\$\$|  \$\$\$\$\$\$
+| \$\$  | \$\$| \$\$        | \$\$ /\$\$| \$\$  | \$\$ /\$\$__  \$\$ \____  \$\$
+| \$\$  | \$\$| \$\$        |  \$\$\$\$/| \$\$  | \$\$|  \$\$\$\$\$\$\$ /\$\$\$\$\$\$\$/
+|__/  |__/|__/         \___/  |__/  |__/ \_______/|_______/
+ /\$\$   /\$\$             /\$\$            /\$\$\$\$\$\$
+| \$\$  | \$\$            | \$\$           /\$\$__  \$\$
+| \$\$  | \$\$  /\$\$\$\$\$\$  /\$\$\$\$\$\$        | \$\$  \__/ /\$\$  /\$\$  /\$\$  /\$\$\$\$\$\$   /\$\$\$\$\$\$
+| \$\$\$\$\$\$\$\$ /\$\$__  \$\$|_  \$\$_/        |  \$\$\$\$\$\$ | \$\$ | \$\$ | \$\$ |____  \$\$ /\$\$__  \$\$
+| \$\$__  \$\$| \$\$  \ \$\$  | \$\$           \____  \$\$| \$\$ | \$\$ | \$\$  /\$\$\$\$\$\$\$| \$\$  \ \$\$
+| \$\$  | \$\$| \$\$  | \$\$  | \$\$ /\$\$       /\$\$  \ \$\$| \$\$ | \$\$ | \$\$ /\$\$__  \$\$| \$\$  | \$\$
+| \$\$  | \$\$|  \$\$\$\$\$\$/  |  \$\$\$\$/      |  \$\$\$\$\$\$/|  \$\$\$\$\$/\$\$\$\$/|  \$\$\$\$\$\$\$| \$\$\$\$\$\$\$/
+|__/  |__/ \______/    \___/         \______/  \_____/\___/  \_______/| \$\$____/
+                                                                      | \$\$
+                                                                      | \$\$
+                                                                      |__/
+"
+echo "************************************************** 1. Prepare the workspace **********************************************************"
+if [ ! -d "./arthas-hot-swap" ]
+then
+  mkdir ./arthas-hot-swap
+  echo "******* mkdir ./arthas-hot-swap success"
+else
+  rm -rf ./arthas-hot-swap
+  mkdir ./arthas-hot-swap
+  echo "******* ./arthas-hot-swap exists, delete the directory first, and then create a new one"
+fi
+cd ./arthas-hot-swap
+rm -f $(pwd)/arthas-hot-swap-result
 
-    <ul> 阿里巴巴开源代码诊断工具——Arthas，具有非常强大的功能，其中一项就是热替换，通过redefine命令替换新的class文件。这是一个非常棒的功能，可以帮助开发避免重新启动应用
-    ，迅速部署代码到远程环境。Arthas官方文档推荐使用jad/mc/redefine等一连串命令，流程大概是：jad命令对老class进行反编译->vim编辑源码->mc命令编译源码->redefine热替换class，
-    这种方式存在两个问题：一是太麻烦，二是mc编译大概率会失败。这个插件就是为了提升使用Arthas进行热替换的效率，开发者使用该插件的流程：本地编译->右键选择Arthas Hot Swap->
-    自动生成命令复制到剪切板->登录远程环境粘贴执行命令->热部署成功<ul/>
-    ]]></description>
+echo "**************************************************** 2. install openssl **************************************************************"
+openssl version
+if [[ $? -eq 0 ]]; then
+    echo "*******  openssl has been installed successfully "
+else
+    echo "*******  openssl is not installed, and installation were start next "
+    sudo yum install openssl openssl-devel
+fi
 
-    <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
-         on how to target different products -->
-    <depends>com.intellij.modules.platform</depends>
+echo "********************************************* 3. Download the encrypted file *********************************************************"
+curl  ${currentClassOssUrl} >> encrypt-${className}.txt
 
-    <idea-version since-build="162"/>
+echo "************************************************* 4. Encrypt the file ****************************************************************"
+openssl enc -aes-128-cbc -a -d -in encrypt-${className}.txt -out ${className}.class -K $1 -iv $2
 
-    <extensions defaultExtensionNs="com.intellij">
-        <projectConfigurable parentId="tools" instance="com.xxxtai.arthas.dialog.SettingDialog"
-                                 id="com.xxxtai.arthas.dialog.SettingDialog" displayName="Arthas Hot Swap"/>
-        <projectService serviceImplementation="com.xxxtai.arthas.domain.AppSettingsState"/>
+echo "************************************************* 5. Install arthas ******************************************************************"
+curl -L http://gjusp.alicdn.com/jucube/arthas-install.sh | sh
 
-        <!-- 自定义控制台输入 -->
-        <toolWindow canCloseContents="true" anchor="bottom"
-                    id="Arthas Hot Swap"
-                    icon="PluginIcons.HOT_16_16"
-                    factoryClass="com.xxxtai.arthas.dialog.MyToolWindowFactory">
-        </toolWindow>
-    </extensions>
+echo "************************************************* 6. Create a pipeline ***************************************************************"
+rm -f tmp_in
+mknod tmp_in p
+exec 8<> tmp_in
+./as.sh --select ${selectJavaProcessName} <&8 &
 
-    <actions>
-        <action id="swapThisClass"
-                class="com.xxxtai.arthas.action.SwapThisClass"
-                text="Swap This Class"
-                description="arthas hot swap">
-        </action>
+echo "********************************************* 7. Choose the java process *************************************************************"
+sleep 1s
+echo "
+" >> tmp_in
 
-        <group id="arthas-hot-swap-plugin" popup="true"
-               text="Arthas Hot Swap"
-               icon="PluginIcons.HOT_16_16">
-            <add-to-group group-id="EditorPopupMenu" anchor="after" relative-to-action="CopyReference"/>
-            <separator/>
-            <reference ref="swapThisClass"/>
-        </group>
-    </actions>
-</idea-plugin>
+echo "*********************************************** 8. Redefine the class ****************************************************************"
+sleep 3s
+echo "redefine $(pwd)/${className}.class > $(pwd)/arthas-hot-swap-result" >> tmp_in
+sleep 4s
+echo "stop" >> tmp_in
+sleep 2s
+
+swapResult=$(cat $(pwd)/arthas-hot-swap-result | grep "success")
+echo $swapResult
+if [[ $swapResult != "" ]]
+then
+echo '
+****************************************** 9. The following files were successfully hot deployed *******************************************
+*****
+***** ${className}.class
+*****
+********************************************************************************************************************************************
+'
+else
+echo '
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 9. Failed to hot deployed the following files %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%
+%%%%% ${className}.class
+%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+'
+cat $(pwd)/arthas-hot-swap-result
+fi
+
