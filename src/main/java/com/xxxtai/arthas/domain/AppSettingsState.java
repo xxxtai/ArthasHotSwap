@@ -4,6 +4,7 @@ import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
+import com.intellij.openapi.project.Project;
 import com.intellij.util.xmlb.XmlSerializerUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -15,19 +16,19 @@ import org.jetbrains.annotations.Nullable;
  */
 @State(
         name = "com.xxxtai.arthas.domain.AppSettingsState",
-        storages = {@Storage("SdkSettingsPlugin.xml")}
+        storages = {@Storage("setting.xml")}
 )
 public class AppSettingsState implements PersistentStateComponent<AppSettingsState> {
 
-    public String endpoint = "endpoint";
-    public String accessKeyId = "your accessKeyId";
-    public String accessKeySecret = "your accessKeySecret";
-    public String bucketName = "arthas-hot-swap";
-    public String jvmIndex = "1";
+    public String endpoint = "http://oss-cn-beijing.aliyuncs.com";
+    public String accessKeyId = "default";
+    public String accessKeySecret = "default";
+    public String bucketName = "default";
+    public String selectJavaProcessName = "";
 
 
-    public static AppSettingsState getInstance() {
-        return ServiceManager.getService(AppSettingsState.class);
+    public static AppSettingsState getInstance(@NotNull Project project) {
+        return ServiceManager.getService(project, AppSettingsState.class);
     }
 
     @Nullable
