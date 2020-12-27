@@ -17,7 +17,7 @@ public class AppSettingsComponent {
     private final JBTextField ossAccessKeyIdText = new JBTextField();
     private final JBTextField ossAccessKeySecretText = new JBTextField();
     private final JBTextField bucketNameText = new JBTextField();
-    private final JBTextField jvmIndex = new JBTextField();
+    private final JBTextField selectJavaProcessText = new JBTextField();
 
 
     public AppSettingsComponent() {
@@ -26,7 +26,7 @@ public class AppSettingsComponent {
                 .addLabeledComponent(new JBLabel("Enter OSS AccessKeyId: "), ossAccessKeyIdText, 1, false)
                 .addLabeledComponent(new JBLabel("Enter OSS AccessKeySecret: "), ossAccessKeySecretText, 1, false)
                 .addLabeledComponent(new JBLabel("Enter OSS BucketName: "), bucketNameText, 1, false)
-                .addLabeledComponent(new JBLabel("Enter Default Index Of JVM: "), jvmIndex, 1, false)
+                .addLabeledComponent(new JBLabel("Enter JAVA PROCESS: "), selectJavaProcessText, 1, false)
                 .addComponentFillVertically(new JPanel(), 0)
                 .getPanel();
     }
@@ -75,12 +75,12 @@ public class AppSettingsComponent {
         bucketNameText.setText(newText);
     }
 
-    @NotNull
-    public String getJvmIndex() {
-        return jvmIndex.getText();
+    public String getSelectJavaProcessText() {
+        return selectJavaProcessText.getText();
     }
 
-    public void setJvmIndex(String newText) {
-        jvmIndex.setText(newText);
+    public void setSelectJavaProcessText(String newText) {
+        selectJavaProcessText.setText(newText);
     }
+
 }
