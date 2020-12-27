@@ -6,12 +6,23 @@ import com.xxxtai.arthas.constants.CommonConstants;
 import com.xxxtai.arthas.domain.AppSettingsState;
 import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.Nls;
+import com.intellij.openapi.project.Project;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 
 public class SettingDialog implements Configurable {
     private AppSettingsComponent mySettingsComponent;
+    private Project project;
+    /**
+     * 设置信息
+     */
+    private AppSettingsState settings;
+
+    public SettingDialog(Project project) {
+        this.project = project;
+        settings = AppSettingsState.getInstance(this.project);
+    }
 
     @Nls(capitalization = Nls.Capitalization.Title)
     @Override
@@ -28,11 +39,11 @@ public class SettingDialog implements Configurable {
 
     @Override
     public boolean isModified() {
-        AppSettingsState settings = AppSettingsState.getInstance();
         return !mySettingsComponent.getOssEndpointText().equals(settings.endpoint)
                 || !mySettingsComponent.getOssAccessKeyIdText().equals(settings.accessKeyId)
                 || !mySettingsComponent.getOssAccessKeySecretText().equals(settings.accessKeySecret)
-                || !mySettingsComponent.getBucketNameText().equals(settings.bucketName);
+                || !mySettingsComponent.getBucketNameText().equals(settings.bucketName)
+                || !mySettingsComponent.getSelectJavaProcessText().equals(settings.selectJavaProcessName);
     }
 
     @Override
@@ -43,20 +54,20 @@ public class SettingDialog implements Configurable {
         if (!mySettingsComponent.getOssEndpointText().contains(CommonConstants.URL_SEPARATOR)) {
             throw new ConfigurationException("endpoint should start with http:// or https://");
         }
-        AppSettingsState settings = AppSettingsState.getInstance();
         settings.endpoint = mySettingsComponent.getOssEndpointText();
         settings.accessKeyId = mySettingsComponent.getOssAccessKeyIdText();
         settings.accessKeySecret = mySettingsComponent.getOssAccessKeySecretText();
         settings.bucketName = mySettingsComponent.getBucketNameText();
+        settings.selectJavaProcessName = mySettingsComponent.getSelectJavaProcessText();
     }
 
     @Override
     public void reset() {
-        AppSettingsState settings = AppSettingsState.getInstance();
         mySettingsComponent.setOssEndpointText(settings.endpoint);
         mySettingsComponent.setOssAccessKeyIdText(settings.accessKeyId);
         mySettingsComponent.setOssAccessKeySecretText(settings.accessKeySecret);
         mySettingsComponent.setBucketNameText(settings.bucketName);
+        mySettingsComponent.setSelectJavaProcessText(settings.selectJavaProcessName);
     }
 
     @Override
