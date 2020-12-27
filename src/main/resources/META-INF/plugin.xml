@@ -19,9 +19,9 @@
     <idea-version since-build="162"/>
 
     <extensions defaultExtensionNs="com.intellij">
-        <applicationConfigurable parentId="tools" instance="com.xxxtai.arthas.dialog.SettingDialog"
+        <projectConfigurable parentId="tools" instance="com.xxxtai.arthas.dialog.SettingDialog"
                                  id="com.xxxtai.arthas.dialog.SettingDialog" displayName="Arthas Hot Swap"/>
-        <applicationService serviceImplementation="com.xxxtai.arthas.domain.AppSettingsState"/>
+        <projectService serviceImplementation="com.xxxtai.arthas.domain.AppSettingsState"/>
 
         <!-- 自定义控制台输入 -->
         <toolWindow canCloseContents="true" anchor="bottom"
