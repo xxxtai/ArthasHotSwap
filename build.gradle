@@ -31,6 +31,7 @@ patchPluginXml {
       <p>1.0-RELEASE</p>
       <ul>
         <li> support swap one class file </li>
+        <li> 增加Artahs自动选择Java进程功能 </li>
       </ul>
 
 """
