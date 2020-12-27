@@ -31,7 +31,7 @@ else
   echo "******* ./arthas-hot-swap exists, delete the directory first, and then create a new one"
 fi
 cd ./arthas-hot-swap
-rm -f /tmp/arthas-hot-swap-result
+rm -f $(pwd)/arthas-hot-swap-result
 
 echo "**************************************************** 2. install openssl **************************************************************"
 openssl version
@@ -64,12 +64,12 @@ echo "
 
 echo "*********************************************** 8. Redefine the class ****************************************************************"
 sleep 3s
-echo "redefine $(pwd)/${className}.class > /tmp/arthas-hot-swap-result" >> tmp_in
+echo "redefine $(pwd)/${className}.class > $(pwd)/arthas-hot-swap-result" >> tmp_in
 sleep 4s
-echo "q" >> tmp_in
+echo "stop" >> tmp_in
 sleep 2s
 
-swapResult=$(cat /tmp/arthas-hot-swap-result | grep "success")
+swapResult=$(cat $(pwd)/arthas-hot-swap-result | grep "success")
 echo $swapResult
 if [[ $swapResult != "" ]]
 then
@@ -88,6 +88,6 @@ echo '
 %%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 '
-cat /tmp/arthas-hot-swap-result
+cat $(pwd)/arthas-hot-swap-result
 fi
 
