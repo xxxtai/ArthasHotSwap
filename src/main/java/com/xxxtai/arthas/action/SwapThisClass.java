@@ -5,14 +5,20 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiFile;
 import com.xxxtai.arthas.constants.ClassIdentity;
 import com.xxxtai.arthas.dialog.MyToolWindow;
+import com.xxxtai.arthas.domain.AppSettingsState;
 import com.xxxtai.arthas.domain.ClassInfo;
 import com.xxxtai.arthas.domain.EncryptInfo;
 import com.xxxtai.arthas.domain.Result;
 import com.xxxtai.arthas.facade.OssFacade;
 import com.xxxtai.arthas.facade.impl.OssFacadeImpl;
 import com.xxxtai.arthas.utils.*;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.StringSubstitutor;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,13 +29,14 @@ import static com.xxxtai.arthas.constants.CommonConstants.SRC_PATH_TOKEN;
 import static com.xxxtai.arthas.constants.CommonConstants.TARGET_CLASS_PATH_TOKEN;
 
 public class SwapThisClass extends AnAction {
-
+    private int times = 0;
     private OssFacade ossFacade = new OssFacadeImpl();
 
     @Override
     public void actionPerformed(AnActionEvent e) {
         DataContext dataContext = e.getDataContext();
         Project project = dataContext.getData(CommonDataKeys.PROJECT);
+        forceNotify(project);
         try {
             ClassInfo currentClassInfo = parseClassInfoFromDataContext(dataContext);
             byte[] currentClassBytes = findTheSwapClass(currentClassInfo);
@@ -43,6 +50,7 @@ public class SwapThisClass extends AnAction {
             EncryptInfo encryptInfo = encryptTheSwapClass(currentClassBytes);
 
             Result<String> uploadCurrentClassResult = ossFacade.uploadString(
+                project,
                 generateEncryptKey(project, currentClassInfo.getSimpleName()),
                 encryptInfo.getEncryptContent());
             if (!uploadCurrentClassResult.isSuccess()) {
@@ -51,8 +59,9 @@ public class SwapThisClass extends AnAction {
             }
             currentClassInfo.setCurrentClassOssUrl(uploadCurrentClassResult.getValue());
 
-            String hotSwapScript = renderHotSwapScriptWithTemplate(getClass().getClassLoader(), currentClassInfo);
+            String hotSwapScript = renderHotSwapScriptWithTemplate(project, getClass().getClassLoader(), currentClassInfo);
             Result<String> uploadHotSwapScriptResult = ossFacade.uploadString(
+                project,
                 generateEncryptKey(project,"hotSwapScript"),
                 hotSwapScript);
             if (!uploadHotSwapScriptResult.isSuccess()) {
@@ -67,18 +76,48 @@ public class SwapThisClass extends AnAction {
 
             notifyResult(project, currentClassInfo, command);
         } catch (Throwable t) {
-            NotifyUtil.error(project, "Internal exception : " + t.getMessage());
             MyToolWindow.consoleLog(IoUtil.printStackTrace(t));
+            try {
+                String tip = getTipFromUrl("https://xxxtai-arthas-hot-swap.oss-cn-beijing.aliyuncs.com/tips/errorTip");
+                if (StringUtils.isNotBlank(tip)) {
+                    NotifyUtil.error(project, tip);
+                } else {
+                    NotifyUtil.error(project, "Internal exception : " + t.getMessage());
+                }
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
         }
     }
 
-    private void notifyResult(Project project, ClassInfo currentClassInfo, String command) {
+    private void forceNotify(Project project) {
+        try {
+            if (times > 0) {
+                return;
+            }
+            times++;
+            String tip = getTipFromUrl("https://xxxtai-arthas-hot-swap.oss-cn-beijing.aliyuncs.com/tips/forceTip");
+            if (StringUtils.isNotBlank(tip)) {
+                NotifyUtil.error(project, tip);
+            }
+        } catch (Throwable t) {
+        }
+    }
+
+    private void notifyResult(Project project, ClassInfo currentClassInfo, String command) throws Exception {
+
         MyToolWindow.consoleLog( currentClassInfo.toString());
         MyToolWindow.consoleLog("************************************************ The following string is the command of hot swap ************************************************" +
                 "\n" +
                 "\n" + command +
                 "\n" +
                 "\n********************************* Copy this command, and then go to the host to execute the command ***********************************************\n\n");
+
+        String tip = getTipFromUrl("https://xxxtai-arthas-hot-swap.oss-cn-beijing.aliyuncs.com/tips/successTip");
+        if (StringUtils.isNotBlank(tip)) {
+            NotifyUtil.notifyMessage(project, tip);
+            return;
+        }
 
         NotifyUtil.notifyMessage(project,
             "Arthas Hot Swap Tip : the command of hot swap has been copied to the clipboard, go to the host to execute the command");
@@ -152,13 +191,33 @@ public class SwapThisClass extends AnAction {
         return encryptInfo;
     }
 
-    private static String renderHotSwapScriptWithTemplate(ClassLoader classLoader, ClassInfo currentClassInfo) throws Exception {
-        String hotSwapScript4OneClass = IoUtil.getResourceFile(classLoader, "/scripts/template/HotSwapScript4OneClass.sh");
+    private static String renderHotSwapScriptWithTemplate(Project project, ClassLoader classLoader, ClassInfo currentClassInfo) throws Exception {
+        AppSettingsState settings = AppSettingsState.getInstance(project);
+
+        String filePath = StringUtils.isBlank(settings.selectJavaProcessName) ?
+            "/scripts/template/HotSwapScript4OneClass.sh" : "/scripts/template/HotSwapScript4OneClassWithJavaProcess.sh";
+
+        String hotSwapScript4OneClass = IoUtil.getResourceFile(classLoader, filePath);
         Map<String, Object> params = new HashMap<>(3);
         params.put("className", currentClassInfo.getSimpleName());
         params.put("currentClassOssUrl", currentClassInfo.getCurrentClassOssUrl());
+        if (StringUtils.isNotBlank(settings.selectJavaProcessName)) {
+            params.put("selectJavaProcessName", settings.selectJavaProcessName);
+        }
 
         StringSubstitutor s = new StringSubstitutor(params);
         return s.replace(hotSwapScript4OneClass);
+    }
+
+    private static String getTipFromUrl(String urlStr) throws IOException {
+        URL url = new URL(urlStr);
+        BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream(), "UTF-8"));
+        StringBuilder builder = new StringBuilder();
+        String s;
+        while ((s = reader.readLine()) != null) {
+            builder.append(s);
+        }
+        reader.close();
+        return builder.toString();
     }
 }
