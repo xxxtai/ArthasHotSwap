@@ -8,6 +8,7 @@ import com.aliyun.oss.model.CannedAccessControlList;
 import com.aliyun.oss.model.ObjectMetadata;
 import com.aliyun.oss.model.PutObjectRequest;
 import com.aliyun.oss.model.StorageClass;
+import com.intellij.openapi.project.Project;
 import com.xxxtai.arthas.constants.CommonConstants;
 import com.xxxtai.arthas.dialog.MyToolWindow;
 import com.xxxtai.arthas.domain.AppSettingsState;
@@ -21,8 +22,8 @@ public class OssFacadeImpl implements OssFacade {
     private static String DIRECTORY = "public/";
 
     @Override
-    public Result<String> uploadString(String key, String content) {
-        Result<OssInfo> parseResult = parseOssInfo();
+    public Result<String> uploadString(Project project, String key, String content) {
+        Result<OssInfo> parseResult = parseOssInfo(project);
         if (!parseResult.isSuccess()) {
             return Result.buildErrorResult(parseResult.getErrorMsg());
         }
@@ -46,9 +47,9 @@ public class OssFacadeImpl implements OssFacade {
         }
     }
 
-    private Result<OssInfo> parseOssInfo() {
+    private Result<OssInfo> parseOssInfo(Project project) {
         OssInfo ossInfo = new OssInfo();
-        AppSettingsState settings = AppSettingsState.getInstance();
+        AppSettingsState settings = AppSettingsState.getInstance(project);
         if (CommonConstants.DEFAULT.equals(settings.endpoint)
             || CommonConstants.DEFAULT.equals(settings.accessKeyId)
             || CommonConstants.DEFAULT.equals(settings.accessKeySecret)
