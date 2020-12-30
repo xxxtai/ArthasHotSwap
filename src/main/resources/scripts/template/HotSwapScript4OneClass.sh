@@ -66,7 +66,7 @@ echo "*********************************************** 8. Redefine the class ****
 sleep 3s
 echo "redefine $(pwd)/${className}.class > $(pwd)/arthas-hot-swap-result" >> tmp_in
 sleep 4s
-echo "stop" >> tmp_in
+echo "quit" >> tmp_in
 sleep 2s
 
 swapResult=$(cat $(pwd)/arthas-hot-swap-result | grep "success")
