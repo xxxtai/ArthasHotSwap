@@ -26,7 +26,7 @@ public class AppSettingsComponent {
                 .addLabeledComponent(new JBLabel("Enter OSS AccessKeyId: "), ossAccessKeyIdText, 1, false)
                 .addLabeledComponent(new JBLabel("Enter OSS AccessKeySecret: "), ossAccessKeySecretText, 1, false)
                 .addLabeledComponent(new JBLabel("Enter OSS BucketName: "), bucketNameText, 1, false)
-                .addLabeledComponent(new JBLabel("Enter JAVA PROCESS: "), selectJavaProcessText, 1, false)
+                .addLabeledComponent(new JBLabel("Enter Java Process: "), selectJavaProcessText, 1, false)
                 .addComponentFillVertically(new JPanel(), 0)
                 .getPanel();
     }
