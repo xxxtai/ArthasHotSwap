@@ -1,3 +1,4 @@
+[![Releases](https://img.shields.io/github/release/etcd-io/etcd/all.svg?style=flat-square)](https://github.com/xxxtai/ArthasHotSwap/releases)
 # Arthas Hot Swap English Abstract
 This repo is a plugin of Intellij IDEA that can help you achieve hot deployment without any configuration and debugging. The use process is as follows. The first step, you need use idea to compile your source file; The second step, right-click on the class name of the source file, select 'Arthas Hot Swap' first, and then select 'Swap this class', the command of hot swap will be automatically copied to clipboard; The third step, log in to the remote server, paste the command and execute, the class file you selected will be hot swaped.
 
