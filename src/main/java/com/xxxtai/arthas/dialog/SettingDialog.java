@@ -11,6 +11,11 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 
+/**
+ * Copyright (c) 2020, 2021, xxxtai. All rights reserved.
+ *
+ * @author xxxtai
+ */
 public class SettingDialog implements Configurable {
     private AppSettingsComponent mySettingsComponent;
     private Project project;
@@ -43,7 +48,8 @@ public class SettingDialog implements Configurable {
                 || !mySettingsComponent.getOssAccessKeyIdText().equals(settings.accessKeyId)
                 || !mySettingsComponent.getOssAccessKeySecretText().equals(settings.accessKeySecret)
                 || !mySettingsComponent.getBucketNameText().equals(settings.bucketName)
-                || !mySettingsComponent.getSelectJavaProcessText().equals(settings.selectJavaProcessName);
+                || !mySettingsComponent.getSelectJavaProcessText().equals(settings.selectJavaProcessName)
+                || !mySettingsComponent.getSpecifyJavaHomeText().equals(settings.specifyJavaHome);
     }
 
     @Override
@@ -59,6 +65,7 @@ public class SettingDialog implements Configurable {
         settings.accessKeySecret = mySettingsComponent.getOssAccessKeySecretText();
         settings.bucketName = mySettingsComponent.getBucketNameText();
         settings.selectJavaProcessName = mySettingsComponent.getSelectJavaProcessText();
+        settings.specifyJavaHome = mySettingsComponent.getSpecifyJavaHomeText();
     }
 
     @Override
@@ -68,6 +75,7 @@ public class SettingDialog implements Configurable {
         mySettingsComponent.setOssAccessKeySecretText(settings.accessKeySecret);
         mySettingsComponent.setBucketNameText(settings.bucketName);
         mySettingsComponent.setSelectJavaProcessText(settings.selectJavaProcessName);
+        mySettingsComponent.setSpecifyJavaHomeText(settings.specifyJavaHome);
     }
 
     @Override
