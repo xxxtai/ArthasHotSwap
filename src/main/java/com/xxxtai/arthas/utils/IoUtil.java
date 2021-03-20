@@ -5,6 +5,11 @@ import java.nio.charset.StandardCharsets;
 
 import com.xxxtai.arthas.dialog.MyToolWindow;
 
+/**
+ * Copyright (c) 2020, 2021, xxxtai. All rights reserved.
+ *
+ * @author xxxtai
+ */
 public class IoUtil {
 
     public static String getResourceFile(ClassLoader classLoader, String filePath) throws Exception {
@@ -30,7 +35,7 @@ public class IoUtil {
             return null;
         }
         try (BufferedInputStream bufferedInputStream = new BufferedInputStream(new FileInputStream(file))) {
-            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream((int) file.length());
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream((int)file.length());
             int bufSize = 1024;
             byte[] buffer = new byte[bufSize];
             int len;
