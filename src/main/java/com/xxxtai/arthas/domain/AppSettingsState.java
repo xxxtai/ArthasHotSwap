@@ -24,12 +24,12 @@ import org.jetbrains.annotations.Nullable;
 )
 public class AppSettingsState implements PersistentStateComponent<AppSettingsState> {
 
-    public String endpoint = "http://oss-cn-beijing.aliyuncs.com";
-    public String accessKeyId = "default";
-    public String accessKeySecret = "default";
-    public String bucketName = "default";
+    public String endpoint = "";
+    public String accessKeyId = "";
+    public String accessKeySecret = "";
+    public String bucketName = "";
     public String selectJavaProcessName = "";
-    public String specifyJavaHome = "default";
+    public String specifyJavaHome = "";
 
     public static AppSettingsState getInstance(@NotNull Project project) {
         return ServiceManager.getService(project, AppSettingsState.class);
