@@ -1,9 +1,10 @@
 <idea-plugin>
-    <id>com.xxxtai.arthas.arthas-hotswap</id>
+    <id>ArthasHotSwap</id>
     <name>Arthas Hot Swap</name>
     <vendor email="xxxtai@163.com" url="https://github.com/xxxtai/arthas-hotswap">moda</vendor>
     <description><![CDATA[
     <p> Arthas Hot Swap </p>
+    <p><a href="https://github.com/xxxtai/arthas-hotswap">访问Github</a> </p>
     <ul> 无需安装任何sdk实现远程热部署，提升开发效率利器，使用流程：本地编译->右键选择Arthas Hot Swap->自动生成命令复制到剪切板->登录远程环境粘贴执行命令->热部署成功。</ul>
 
     <ul> 阿里巴巴开源代码诊断工具——Arthas，具有非常强大的功能，其中一项就是热替换，通过redefine命令替换新的class文件。这是一个非常棒的功能，可以帮助开发避免重新启动应用
@@ -32,8 +33,8 @@
     </extensions>
 
     <actions>
-        <action id="swapThisClass"
-                class="com.xxxtai.arthas.action.SwapThisClass"
+        <action id="swapClassAction"
+                class="com.xxxtai.arthas.action.SwapClassAction"
                 text="Swap This Class"
                 description="arthas hot swap">
         </action>
@@ -43,7 +44,7 @@
                icon="PluginIcons.HOT_16_16">
             <add-to-group group-id="EditorPopupMenu" anchor="after" relative-to-action="CopyReference"/>
             <separator/>
-            <reference ref="swapThisClass"/>
+            <reference ref="swapClassAction"/>
         </group>
     </actions>
 </idea-plugin>
