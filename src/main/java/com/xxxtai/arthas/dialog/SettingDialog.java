@@ -32,7 +32,7 @@ public class SettingDialog implements Configurable {
     @Nls(capitalization = Nls.Capitalization.Title)
     @Override
     public String getDisplayName() {
-        return "Arthas Hot Swap";
+        return "ArthasHotSwap";
     }
 
     @Nullable
@@ -45,19 +45,17 @@ public class SettingDialog implements Configurable {
     @Override
     public boolean isModified() {
         return !mySettingsComponent.getOssEndpointText().equals(settings.endpoint)
-                || !mySettingsComponent.getOssAccessKeyIdText().equals(settings.accessKeyId)
-                || !mySettingsComponent.getOssAccessKeySecretText().equals(settings.accessKeySecret)
-                || !mySettingsComponent.getBucketNameText().equals(settings.bucketName)
-                || !mySettingsComponent.getSelectJavaProcessText().equals(settings.selectJavaProcessName)
-                || !mySettingsComponent.getSpecifyJavaHomeText().equals(settings.specifyJavaHome);
+            || !mySettingsComponent.getOssAccessKeyIdText().equals(settings.accessKeyId)
+            || !mySettingsComponent.getOssAccessKeySecretText().equals(settings.accessKeySecret)
+            || !mySettingsComponent.getBucketNameText().equals(settings.bucketName)
+            || !mySettingsComponent.getSelectJavaProcessText().equals(settings.selectJavaProcessName)
+            || !mySettingsComponent.getSpecifyJavaHomeText().equals(settings.specifyJavaHome);
     }
 
     @Override
     public void apply() throws ConfigurationException {
-        if (StringUtils.isBlank(mySettingsComponent.getOssEndpointText())) {
-            throw new ConfigurationException("endpoint can not be blank");
-        }
-        if (!mySettingsComponent.getOssEndpointText().contains(CommonConstants.URL_SEPARATOR)) {
+        if (StringUtils.isNotBlank(mySettingsComponent.getOssEndpointText())
+            && !mySettingsComponent.getOssEndpointText().contains(CommonConstants.URL_SEPARATOR)) {
             throw new ConfigurationException("endpoint should start with http:// or https://");
         }
         settings.endpoint = mySettingsComponent.getOssEndpointText();
