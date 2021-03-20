@@ -1,4 +1,6 @@
+#Copyright (c) 2020, 2021, xxxtai. All rights reserved.
 #!/usr/bin/env bash
+
 echo "
   /\$\$\$\$\$\$              /\$\$     /\$\$
  /\$\$__  \$\$            | \$\$    | \$\$
@@ -43,19 +45,36 @@ else
 fi
 
 echo "********************************************* 3. Download the encrypted file *********************************************************"
-curl  ${currentClassOssUrl} >> encrypt-${className}.txt
+curl  %[currentClassOssUrl] >> encrypt-%[className].txt
 
 echo "************************************************* 4. Encrypt the file ****************************************************************"
-openssl enc -aes-128-cbc -a -d -in encrypt-${className}.txt -out ${className}.class -K $1 -iv $2
+openssl enc -aes-128-cbc -a -d -in encrypt-%[className].txt -out %[className].class -K $1 -iv $2
 
 echo "************************************************* 5. Install arthas ******************************************************************"
-curl -L http://gjusp.alicdn.com/jucube/arthas-install.sh | sh
+specifyJavaHome=%[specifyJavaHome]
+arthas_start_cmd=''
+
+if [[ ${specifyJavaHome} == 'default' ]]
+then
+    curl -L https://arthas.aliyun.com/install.sh | sh
+    arthas_start_cmd='./as.sh'
+else
+    curl -O https://arthas.aliyun.com/arthas-boot.jar
+    arthas_start_cmd=${specifyJavaHome}"/bin/java -jar arthas-boot.jar"
+fi
+
+selectJavaProcessName=%[selectJavaProcessName]
+
+if [[ ${selectJavaProcessName} != '' ]]
+then
+    arthas_start_cmd=${arthas_start_cmd}" --select "${selectJavaProcessName}
+fi
 
 echo "************************************************* 6. Create a pipeline ***************************************************************"
 rm -f tmp_in
 mknod tmp_in p
 exec 8<> tmp_in
-./as.sh <&8 &
+${arthas_start_cmd} <&8 &
 
 echo "********************************************* 7. Choose the java process *************************************************************"
 sleep 1s
@@ -64,7 +83,7 @@ echo "
 
 echo "*********************************************** 8. Redefine the class ****************************************************************"
 sleep 3s
-echo "redefine $(pwd)/${className}.class > $(pwd)/arthas-hot-swap-result" >> tmp_in
+echo "redefine $(pwd)/%[className].class > $(pwd)/arthas-hot-swap-result" >> tmp_in
 sleep 4s
 echo "quit" >> tmp_in
 sleep 2s
@@ -76,7 +95,7 @@ then
 echo '
 ****************************************** 9. The following files were successfully hot deployed *******************************************
 *****
-***** ${className}.class
+***** %[className].class
 *****
 ********************************************************************************************************************************************
 '
@@ -84,7 +103,7 @@ else
 echo '
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 9. Failed to hot deployed the following files %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%
-%%%%% ${className}.class
+%%%%% %[className].class
 %%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 '
