@@ -54,7 +54,7 @@ echo "************************************************* 5. Install arthas ******
 specifyJavaHome=%[specifyJavaHome]
 arthas_start_cmd=''
 
-if [[ ${specifyJavaHome} == 'default' ]]
+if [[ ${specifyJavaHome} == '' ]]
 then
     curl -L https://arthas.aliyun.com/install.sh | sh
     arthas_start_cmd='./as.sh'
