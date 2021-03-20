@@ -6,6 +6,11 @@ import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
 
+/**
+ * Copyright (c) 2020, 2021, xxxtai. All rights reserved.
+ *
+ * @author xxxtai
+ */
 public class ClipboardUtils {
 
     public static String getClipboardString() {
@@ -15,7 +20,7 @@ public class ClipboardUtils {
         if (trans != null) {
             if (trans.isDataFlavorSupported(DataFlavor.stringFlavor)) {
                 try {
-                    return (String) trans.getTransferData(DataFlavor.stringFlavor);
+                    return (String)trans.getTransferData(DataFlavor.stringFlavor);
                 } catch (Exception e) {
                     //
                 }
