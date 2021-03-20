@@ -18,6 +18,11 @@ import com.xxxtai.arthas.utils.IoUtil;
 
 import java.io.ByteArrayInputStream;
 
+/**
+ * Copyright (c) 2020, 2021, xxxtai. All rights reserved.
+ *
+ * @author xxxtai
+ */
 public class OssFacadeImpl implements OssFacade {
     private static String DIRECTORY = "public/";
 
@@ -30,7 +35,8 @@ public class OssFacadeImpl implements OssFacade {
         OssInfo ossInfo = parseResult.getValue();
         try {
             OSS ossClient = new OSSClientBuilder().build(ossInfo.endpoint, ossInfo.accessKeyId, ossInfo.accessKeySecret);
-            PutObjectRequest putObjectRequest = new PutObjectRequest(ossInfo.bucketName, DIRECTORY + key, new ByteArrayInputStream(content.getBytes()));
+            PutObjectRequest putObjectRequest = new PutObjectRequest(ossInfo.bucketName, DIRECTORY + key,
+                new ByteArrayInputStream(content.getBytes()));
 
             ObjectMetadata metadata = new ObjectMetadata();
             metadata.setHeader(OSSHeaders.OSS_STORAGE_CLASS, StorageClass.Standard.toString());
