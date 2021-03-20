@@ -8,6 +8,11 @@ import javax.swing.text.DefaultCaret;
 
 import static javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS;
 
+/**
+ * Copyright (c) 2020, 2021, xxxtai. All rights reserved.
+ *
+ * @author xxxtai
+ */
 public class MyToolWindow {
     private final JPanel mainPanel;
     private final JTextArea jTextArea;
