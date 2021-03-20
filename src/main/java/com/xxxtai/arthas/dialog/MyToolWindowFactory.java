@@ -8,7 +8,9 @@ import com.intellij.ui.content.ContentFactory;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * @author moda
+ * Copyright (c) 2020, 2021, xxxtai. All rights reserved.
+ *
+ * @author xxxtai
  */
 public class MyToolWindowFactory implements ToolWindowFactory {
 
