@@ -5,7 +5,9 @@ import javax.swing.*;
 import com.intellij.openapi.util.IconLoader;
 
 /**
- * @author moda
+ * Copyright (c) 2020, 2021, xxxtai. All rights reserved.
+ *
+ * @author xxxtai
  */
 public interface PluginIcons {
     Icon HOT_32_32 = IconLoader.getIcon("/icons/hot_32_32.png");
