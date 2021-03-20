@@ -4,6 +4,8 @@ import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiFile;
 import com.xxxtai.arthas.constants.ClassIdentity;
+import com.xxxtai.arthas.constants.ScriptConstants;
+import com.xxxtai.arthas.constants.TipConstants;
 import com.xxxtai.arthas.dialog.MyToolWindow;
 import com.xxxtai.arthas.domain.AppSettingsState;
 import com.xxxtai.arthas.domain.ClassInfo;
@@ -14,6 +16,7 @@ import com.xxxtai.arthas.facade.impl.OssFacadeImpl;
 import com.xxxtai.arthas.utils.*;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.StringSubstitutor;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -28,12 +31,29 @@ import static com.xxxtai.arthas.constants.CommonConstants.PATH_SEPARATOR;
 import static com.xxxtai.arthas.constants.CommonConstants.SRC_PATH_TOKEN;
 import static com.xxxtai.arthas.constants.CommonConstants.TARGET_CLASS_PATH_TOKEN;
 
-public class SwapThisClass extends AnAction {
-    private int times = 0;
+/**
+ * Copyright (c) 2020, 2021, xxxtai. All rights reserved.
+ *
+ * @author xxxtai
+ */
+public class SwapClassAction extends AnAction {
+
+    private static final String CHARSET_NAME = "UTF-8";
+
+    private static final String DELIMITER_PREFIX = "%[";
+
+    private static final String DELIMITER_SUFFIX = "]";
+
+    private static final String COMMAND_TEMPLATE = "sudo curl -L %s  > HotSwapScript4OneClass.sh ; "
+        + "chmod +x HotSwapScript4OneClass.sh; "
+        + "yes | ./HotSwapScript4OneClass.sh  %s %s";
+
+    private volatile boolean isForceNotify = false;
+
     private OssFacade ossFacade = new OssFacadeImpl();
 
     @Override
-    public void actionPerformed(AnActionEvent e) {
+    public void actionPerformed(@NotNull AnActionEvent e) {
         DataContext dataContext = e.getDataContext();
         Project project = dataContext.getData(CommonDataKeys.PROJECT);
         forceNotify(project);
@@ -52,7 +72,8 @@ public class SwapThisClass extends AnAction {
             Result<String> uploadCurrentClassResult = ossFacade.uploadString(
                 project,
                 generateEncryptKey(project, currentClassInfo.getSimpleName()),
-                encryptInfo.getEncryptContent());
+                encryptInfo.getEncryptContent()
+            );
             if (!uploadCurrentClassResult.isSuccess()) {
                 NotifyUtil.error(project, uploadCurrentClassResult.getErrorMsg());
                 return;
@@ -60,25 +81,24 @@ public class SwapThisClass extends AnAction {
             currentClassInfo.setCurrentClassOssUrl(uploadCurrentClassResult.getValue());
 
             String hotSwapScript = renderHotSwapScriptWithTemplate(project, getClass().getClassLoader(), currentClassInfo);
-            Result<String> uploadHotSwapScriptResult = ossFacade.uploadString(
+            Result<String> uploadScriptResult = ossFacade.uploadString(
                 project,
-                generateEncryptKey(project,"hotSwapScript"),
-                hotSwapScript);
-            if (!uploadHotSwapScriptResult.isSuccess()) {
-                NotifyUtil.error(project, uploadHotSwapScriptResult.getErrorMsg());
+                generateEncryptKey(project, "hotSwapScript"),
+                hotSwapScript
+            );
+            if (!uploadScriptResult.isSuccess()) {
+                NotifyUtil.error(project, uploadScriptResult.getErrorMsg());
                 return;
             }
 
-            String command = String.format("sudo curl -L %s  > HotSwapScript4OneClass.sh ; "
-                    + "chmod +x HotSwapScript4OneClass.sh; "
-                    + "yes | ./HotSwapScript4OneClass.sh  %s %s", uploadHotSwapScriptResult.getValue(), encryptInfo.getKey(), encryptInfo.getIv());
+            String command = String.format(COMMAND_TEMPLATE, uploadScriptResult.getValue(), encryptInfo.getKey(), encryptInfo.getIv());
             ClipboardUtils.setClipboardString(command);
 
             notifyResult(project, currentClassInfo, command);
         } catch (Throwable t) {
             MyToolWindow.consoleLog(IoUtil.printStackTrace(t));
             try {
-                String tip = getTipFromUrl("https://xxxtai-arthas-hot-swap.oss-cn-beijing.aliyuncs.com/tips/errorTip");
+                String tip = getTipFromUrl(TipConstants.FORCE);
                 if (StringUtils.isNotBlank(tip)) {
                     NotifyUtil.error(project, tip);
                 } else {
@@ -92,28 +112,24 @@ public class SwapThisClass extends AnAction {
 
     private void forceNotify(Project project) {
         try {
-            if (times > 0) {
+            if (isForceNotify) {
                 return;
             }
-            times++;
-            String tip = getTipFromUrl("https://xxxtai-arthas-hot-swap.oss-cn-beijing.aliyuncs.com/tips/forceTip");
+            isForceNotify = true;
+            String tip = getTipFromUrl(TipConstants.FORCE);
             if (StringUtils.isNotBlank(tip)) {
                 NotifyUtil.error(project, tip);
             }
         } catch (Throwable t) {
+            t.printStackTrace();
         }
     }
 
     private void notifyResult(Project project, ClassInfo currentClassInfo, String command) throws Exception {
+        MyToolWindow.consoleLog(currentClassInfo.toString());
+        MyToolWindow.consoleLog(String.format(TipConstants.SUCCESS_CONSOLE_TIP_TEMPLATE, command));
 
-        MyToolWindow.consoleLog( currentClassInfo.toString());
-        MyToolWindow.consoleLog("************************************************ The following string is the command of hot swap ************************************************" +
-                "\n" +
-                "\n" + command +
-                "\n" +
-                "\n********************************* Copy this command, and then go to the host to execute the command ***********************************************\n\n");
-
-        String tip = getTipFromUrl("https://xxxtai-arthas-hot-swap.oss-cn-beijing.aliyuncs.com/tips/successTip");
+        String tip = getTipFromUrl(TipConstants.SUCCESS);
         if (StringUtils.isNotBlank(tip)) {
             NotifyUtil.notifyMessage(project, tip);
             return;
@@ -170,7 +186,11 @@ public class SwapThisClass extends AnAction {
         String filePath;
         if (ClassIdentity.Type.SOURCE.equals(classInfo.getClassType())) {
             String[] paths = classInfo.getClassPath().split(SRC_PATH_TOKEN);
-            filePath = paths[0] +
+            StringBuilder builder = new StringBuilder();
+            for (int i = 0; i < paths.length - 1; i++) {
+                builder.append(paths[i]);
+            }
+            filePath = builder.toString() +
                 TARGET_CLASS_PATH_TOKEN +
                 classInfo.getQualifiedName().replaceAll("\\.", PATH_SEPARATOR) +
                 ClassIdentity.Suffix.CLASS;
@@ -191,27 +211,29 @@ public class SwapThisClass extends AnAction {
         return encryptInfo;
     }
 
-    private static String renderHotSwapScriptWithTemplate(Project project, ClassLoader classLoader, ClassInfo currentClassInfo) throws Exception {
+    private static String renderHotSwapScriptWithTemplate(
+        Project project,
+        ClassLoader classLoader,
+        ClassInfo currentClassInfo
+    ) throws Exception {
         AppSettingsState settings = AppSettingsState.getInstance(project);
 
-        String filePath = StringUtils.isBlank(settings.selectJavaProcessName) ?
-            "/scripts/template/HotSwapScript4OneClass.sh" : "/scripts/template/HotSwapScript4OneClassWithJavaProcess.sh";
-
-        String hotSwapScript4OneClass = IoUtil.getResourceFile(classLoader, filePath);
-        Map<String, Object> params = new HashMap<>(3);
-        params.put("className", currentClassInfo.getSimpleName());
-        params.put("currentClassOssUrl", currentClassInfo.getCurrentClassOssUrl());
+        String hotSwapScript4OneClass = IoUtil.getResourceFile(classLoader, ScriptConstants.SCRIPT_ONE_CLASS_FILE_PATH);
+        Map<String, Object> params = new HashMap<>(8);
+        params.put(ScriptConstants.CLASS_NAME, currentClassInfo.getSimpleName());
+        params.put(ScriptConstants.CURRENT_CLASS_OSS_URL, currentClassInfo.getCurrentClassOssUrl());
+        params.put(ScriptConstants.SPECIFY_JAVA_HOME, settings.specifyJavaHome);
         if (StringUtils.isNotBlank(settings.selectJavaProcessName)) {
-            params.put("selectJavaProcessName", settings.selectJavaProcessName);
+            params.put(ScriptConstants.SELECT_JAVA_PROCESS_NAME, settings.selectJavaProcessName);
         }
 
-        StringSubstitutor s = new StringSubstitutor(params);
+        StringSubstitutor s = new StringSubstitutor(params, DELIMITER_PREFIX, DELIMITER_SUFFIX);
         return s.replace(hotSwapScript4OneClass);
     }
 
     private static String getTipFromUrl(String urlStr) throws IOException {
         URL url = new URL(urlStr);
-        BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream(), "UTF-8"));
+        BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream(), CHARSET_NAME));
         StringBuilder builder = new StringBuilder();
         String s;
         while ((s = reader.readLine()) != null) {
