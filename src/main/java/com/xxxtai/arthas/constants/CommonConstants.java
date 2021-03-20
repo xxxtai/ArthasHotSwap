@@ -7,7 +7,7 @@ package com.xxxtai.arthas.constants;
  */
 public class CommonConstants {
 
-    public static final String DEFAULT = "default";
+    public static final String DEFAULT = "";
 
     public static final String DEFAULT_ENDPOINT = "http://oss-cn-beijing.aliyuncs.com";
     public static final String DEFAULT_ACCESS_KEY_ID = "";
