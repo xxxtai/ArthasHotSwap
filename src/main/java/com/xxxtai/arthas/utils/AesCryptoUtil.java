@@ -8,6 +8,11 @@ import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
+/**
+ * Copyright (c) 2020, 2021, xxxtai. All rights reserved.
+ *
+ * @author xxxtai
+ */
 public class AesCryptoUtil {
 
     public static String encrypt(String sSrc, String sKey, String sIv) {
@@ -45,7 +50,7 @@ public class AesCryptoUtil {
         int lineCount = 0;
         for (int i = 0; i < bytesWithLineBreak.length; i++) {
             boolean isEnd = false;
-            if (i == bytesWithLineBreak.length - 1 ) {
+            if (i == bytesWithLineBreak.length - 1) {
                 isEnd = true;
             }
 
@@ -66,7 +71,7 @@ public class AesCryptoUtil {
         Random random = new Random();
         byte[] bytes = new byte[size];
         for (int i = 0; i < size; i++) {
-            bytes[i] = (byte) random.nextInt(125);
+            bytes[i] = (byte)random.nextInt(125);
         }
         return bytes;
     }
