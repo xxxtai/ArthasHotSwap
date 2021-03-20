@@ -10,8 +10,8 @@ public class CommonConstants {
     public static final String DEFAULT = "default";
 
     public static final String DEFAULT_ENDPOINT = "http://oss-cn-beijing.aliyuncs.com";
-    public static final String DEFAULT_ACCESS_KEY_ID = "LTAI4GBPpzs5zr78Ez9ijzLw";
-    public static final String DEFAULT_ACCESS_KEY_SECRET = "ePoPPt1zYziWMi9QOgaGqHFZ9LPrsV";
+    public static final String DEFAULT_ACCESS_KEY_ID = "";
+    public static final String DEFAULT_ACCESS_KEY_SECRET = "";
     public static final String DEFAULT_BUCKET_NAME = "xxxtai-arthas-hot-swap";
 
     public static final String URL_SEPARATOR = "://";
