@@ -1,6 +1,5 @@
 package com.xxxtai.arthas.dialog;
 
-import com.intellij.ui.components.JBCheckBox;
 import com.intellij.ui.components.JBLabel;
 import com.intellij.ui.components.JBTextField;
 import com.intellij.util.ui.FormBuilder;
@@ -9,7 +8,10 @@ import org.jetbrains.annotations.NotNull;
 import javax.swing.*;
 
 /**
+ * Copyright (c) 2020, 2021, xxxtai. All rights reserved.
  * Supports creating and managing a JPanel for the Settings Dialog.
+ *
+ * @author xxxtai
  */
 public class AppSettingsComponent {
     private final JPanel myMainPanel;
@@ -18,17 +20,18 @@ public class AppSettingsComponent {
     private final JBTextField ossAccessKeySecretText = new JBTextField();
     private final JBTextField bucketNameText = new JBTextField();
     private final JBTextField selectJavaProcessText = new JBTextField();
-
+    private final JBTextField specifyJavaHomeText = new JBTextField();
 
     public AppSettingsComponent() {
         myMainPanel = FormBuilder.createFormBuilder()
-                .addLabeledComponent(new JBLabel("Enter OSS Endpoint: "), ossEndpointText, 1, false)
-                .addLabeledComponent(new JBLabel("Enter OSS AccessKeyId: "), ossAccessKeyIdText, 1, false)
-                .addLabeledComponent(new JBLabel("Enter OSS AccessKeySecret: "), ossAccessKeySecretText, 1, false)
-                .addLabeledComponent(new JBLabel("Enter OSS BucketName: "), bucketNameText, 1, false)
-                .addLabeledComponent(new JBLabel("Enter Java Process: "), selectJavaProcessText, 1, false)
-                .addComponentFillVertically(new JPanel(), 0)
-                .getPanel();
+            .addLabeledComponent(new JBLabel("Enter OSS Endpoint: "), ossEndpointText, 1, false)
+            .addLabeledComponent(new JBLabel("Enter OSS AccessKeyId: "), ossAccessKeyIdText, 1, false)
+            .addLabeledComponent(new JBLabel("Enter OSS AccessKeySecret: "), ossAccessKeySecretText, 1, false)
+            .addLabeledComponent(new JBLabel("Enter OSS BucketName: "), bucketNameText, 1, false)
+            .addLabeledComponent(new JBLabel("Enter Java Process: "), selectJavaProcessText, 1, false)
+            .addLabeledComponent(new JBLabel("Enter Java Home: "), specifyJavaHomeText, 1, false)
+            .addComponentFillVertically(new JPanel(), 0)
+            .getPanel();
     }
 
     public JPanel getPanel() {
@@ -83,4 +86,11 @@ public class AppSettingsComponent {
         selectJavaProcessText.setText(newText);
     }
 
+    public String getSpecifyJavaHomeText() {
+        return specifyJavaHomeText.getText();
+    }
+
+    public void setSpecifyJavaHomeText(String newText) {
+        specifyJavaHomeText.setText(newText);
+    }
 }
