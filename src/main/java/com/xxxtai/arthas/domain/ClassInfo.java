@@ -2,6 +2,11 @@ package com.xxxtai.arthas.domain;
 
 import com.xxxtai.arthas.constants.ClassIdentity;
 
+/**
+ * Copyright (c) 2020, 2021, xxxtai. All rights reserved.
+ *
+ * @author xxxtai
+ */
 public class ClassInfo {
 
     /**
