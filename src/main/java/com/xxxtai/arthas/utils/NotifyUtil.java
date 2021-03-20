@@ -4,6 +4,11 @@ import com.intellij.notification.*;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Messages;
 
+/**
+ * Copyright (c) 2020, 2021, xxxtai. All rights reserved.
+ *
+ * @author xxxtai
+ */
 public class NotifyUtil {
     private static final NotificationGroup NOTIFICATION = new NotificationGroup("arthas", NotificationDisplayType.BALLOON, false);
 
@@ -27,6 +32,6 @@ public class NotifyUtil {
 
     public static void error(Project project, String errorMsg) {
         Messages.showMessageDialog(project, errorMsg,
-                "Arthas Hot Swap", Messages.getErrorIcon());
+            "Arthas Hot Swap", Messages.getErrorIcon());
     }
 }
