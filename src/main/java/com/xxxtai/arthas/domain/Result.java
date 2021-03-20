@@ -1,5 +1,10 @@
 package com.xxxtai.arthas.domain;
 
+/**
+ * Copyright (c) 2020, 2021, xxxtai. All rights reserved.
+ *
+ * @author xxxtai
+ */
 public class Result<T> {
 
     private boolean success;
