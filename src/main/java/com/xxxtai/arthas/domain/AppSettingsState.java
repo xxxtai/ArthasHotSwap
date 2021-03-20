@@ -10,13 +10,17 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
+ * Copyright (c) 2020, 2021, xxxtai. All rights reserved.
+ *
  * Supports storing the application settings in a persistent way.
  * The State and Storage annotations define the name of the data and the file name where
  * these persistent application settings are stored.
+ *
+ * @author xxxtai
  */
 @State(
-        name = "com.xxxtai.arthas.domain.AppSettingsState",
-        storages = {@Storage("setting.xml")}
+    name = "com.xxxtai.arthas.domain.AppSettingsState",
+    storages = {@Storage("setting.xml")}
 )
 public class AppSettingsState implements PersistentStateComponent<AppSettingsState> {
 
@@ -25,7 +29,7 @@ public class AppSettingsState implements PersistentStateComponent<AppSettingsSta
     public String accessKeySecret = "default";
     public String bucketName = "default";
     public String selectJavaProcessName = "";
-
+    public String specifyJavaHome = "default";
 
     public static AppSettingsState getInstance(@NotNull Project project) {
         return ServiceManager.getService(project, AppSettingsState.class);
