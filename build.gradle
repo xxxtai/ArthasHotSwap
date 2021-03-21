@@ -1,0 +1,45 @@
+plugins {
+    id 'java'
+    id 'org.jetbrains.intellij' version '0.4.21'
+}
+
+group 'com.xxxtai.arthas'
+version '1.1-2018.1.7.community-RELEASE'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+    compile 'org.apache.commons:commons-text:1.8'
+    compile 'com.aliyun.oss:aliyun-sdk-oss:3.8.0'
+    compile 'com.alibaba:fastjson:1.2.54'
+}
+
+// See https://github.com/JetBrains/gradle-intellij-plugin/
+intellij {
+    version '2018.1.7'
+    type 'IC'
+    updateSinceUntilBuild false
+    sameSinceUntilBuild false
+}
+patchPluginXml {
+    changeNotes """
+      <p>1.2-RELEASE</p>
+      <ul>
+        <li> 增加自定义JAVA_HOME功能 </li>
+      </ul>
+      <p>1.1-RELEASE</p>
+      <ul>
+        <li> 增加Artahs自定义选择Java进程功能 </li>
+      </ul>
+      <p>1.0-RELEASE</p>
+      <ul>
+        <li> support swap one class file </li>
+      </ul>
+
+"""
+}

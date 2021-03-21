@@ -1,0 +1,50 @@
+<idea-plugin>
+    <id>ArthasHotSwap</id>
+    <name>Arthas Hot Swap</name>
+    <vendor email="xxxtai@163.com" url="https://github.com/xxxtai/ArthasHotSwap">moda</vendor>
+    <description><![CDATA[
+    <p> Arthas Hot Swap </p>
+    <p><a href="https://github.com/xxxtai/ArthasHotSwap">访问Github</a> </p>
+    <ul> 无需安装任何sdk实现远程热部署，提升开发效率利器，使用流程：本地编译->右键选择Arthas Hot Swap->自动生成命令复制到剪切板->登录远程环境粘贴执行命令->热部署成功。</ul>
+
+    <ul> 阿里巴巴开源代码诊断工具——Arthas，具有非常强大的功能，其中一项就是热替换，通过redefine命令替换新的class文件。这是一个非常棒的功能，可以帮助开发避免重新启动应用
+    ，迅速部署代码到远程环境。Arthas官方文档推荐使用jad/mc/redefine等一连串命令，流程大概是：jad命令对老class进行反编译->vim编辑源码->mc命令编译源码->redefine热替换class，
+    这种方式存在两个问题：一是太麻烦，二是mc编译大概率会失败。这个插件就是为了提升使用Arthas进行热替换的效率，开发者使用该插件的流程：本地编译->右键选择Arthas Hot Swap->
+    自动生成命令复制到剪切板->登录远程环境粘贴执行命令->热部署成功<ul/>
+    ]]></description>
+
+    <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
+         on how to target different products -->
+    <depends>com.intellij.modules.platform</depends>
+
+    <idea-version since-build="162"/>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <projectConfigurable parentId="tools" instance="com.xxxtai.arthas.dialog.SettingDialog"
+                                 id="com.xxxtai.arthas.dialog.SettingDialog" displayName="Arthas Hot Swap"/>
+        <projectService serviceImplementation="com.xxxtai.arthas.domain.AppSettingsState"/>
+
+        <!-- 自定义控制台输入 -->
+        <toolWindow canCloseContents="true" anchor="bottom"
+                    id="Arthas Hot Swap"
+                    icon="PluginIcons.HOT_16_16"
+                    factoryClass="com.xxxtai.arthas.dialog.MyToolWindowFactory">
+        </toolWindow>
+    </extensions>
+
+    <actions>
+        <action id="swapClassAction"
+                class="com.xxxtai.arthas.action.SwapClassAction"
+                text="Swap This Class"
+                description="arthas hot swap">
+        </action>
+
+        <group id="arthas-hot-swap-plugin" popup="true"
+               text="Arthas Hot Swap"
+               icon="PluginIcons.HOT_16_16">
+            <add-to-group group-id="EditorPopupMenu" anchor="after" relative-to-action="CopyReference"/>
+            <separator/>
+            <reference ref="swapClassAction"/>
+        </group>
+    </actions>
+</idea-plugin>
