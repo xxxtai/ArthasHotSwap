@@ -5,7 +5,7 @@
 [![Releases](https://raw.githubusercontent.com/xxxtai/ArthasHotSwap/8351ed6660130eddd0a8b1adeee7dd99ac4121fc/src/main/resources/icons/arthas.svg)](https://github.com/alibaba/arthas)
 
 ## Abstract
-Sometimes, when you're making minor changes to your code, you want to immediately see how they will behave in a working application without shutting down the process. As we all know, hot swap can be achieved through debugging. But in some cases, the debugging port is restricted due to permission control, then you will not be able to achieve hot swap through debugging. 
+Sometimes, when you're making minor changes to your code, you want to immediately see how they will behave in a working application without shutting down the process. As we all know, hot swap can be achieved through debugging. But in some cases, the debugging port is restricted due to permission control, then you will not be able to achieve HotSwap through debugging. 
 
 The IntelliJ IDEA plugin introduced in this article can help implement hot swap on a remote server, and the operation is simple and fast. The plugin in this article is based on [Arths redefine command](https://arthas.aliyun.com/doc/en/redefine.html).
 
@@ -18,21 +18,21 @@ Configuration: “IntelliJ IDEA(Top Left Corner)” -> "Prefrences" -> “Tools�
 
 ## HotSwap steps
 
-### Firstly, compile the entire project
+### Firstly, Compile the entire project
 
 HotSwap uses bytecode files, so first, we need to compile related projects, in the future, we can only compile the modified files to save time.
 
-### Secondly, implementation of ArthasHotSwap
+### Secondly, Implementation of ArthasHotSwap
 
 Find the files(.java or .class) that need to be modified by HotSwap, right click in the IDEA, choose “ArthasHotSwap” and click “Swap this class”. When the plugin is successfully executed in the background, the plugin will copy the command required for HowSwap to the pasteboard.
 
 ![Implementation of ArthasHotSwap](https://ata2-img.oss-cn-zhangjiakou.aliyuncs.com/b47d34513f1d4c53f4fd309464ef37b7.jpg)
 
-### Thirdly, log In and execute command
+### Thirdly, Log in and execute command
 
 Next you need to log in to your remote server, then paste the command form the clipboard and execute it with administrator privileges. If the first execution fails, please execute again. Due to the need for Alibaba Cloud OSS as a medium to transfer bytecode files, your remote server needs to be able to access to the Alibaba Cloud Server.
 
-![Log In and Execute Command](https://user-images.githubusercontent.com/17845368/111869345-f5291f00-89b9-11eb-827b-1b3fd6119979.png)
+![Log in and Execute Command](https://user-images.githubusercontent.com/17845368/111869345-f5291f00-89b9-11eb-827b-1b3fd6119979.png)
 
 ![success](https://ata2-img.oss-cn-zhangjiakou.aliyuncs.com/ff42a488e0a3c2c7aee5e0d1874fadea.png)
 
