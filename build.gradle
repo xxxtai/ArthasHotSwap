@@ -4,7 +4,7 @@ plugins {
 }
 
 group 'com.xxxtai.arthas'
-version '1.1-2018.1.7.community-RELEASE'
+version '1.2-2020.2.3.community-RELEASE'
 
 sourceCompatibility = 1.8
 
@@ -21,7 +21,7 @@ dependencies {
 
 // See https://github.com/JetBrains/gradle-intellij-plugin/
 intellij {
-    version '2018.1.7'
+    version '2020.2.3'
     type 'IC'
     updateSinceUntilBuild false
     sameSinceUntilBuild false
@@ -30,11 +30,11 @@ patchPluginXml {
     changeNotes """
       <p>1.2-RELEASE</p>
       <ul>
-        <li> 增加自定义JAVA_HOME功能 </li>
+        <li> support custom absolute path of java </li>
       </ul>
       <p>1.1-RELEASE</p>
       <ul>
-        <li> 增加Artahs自定义选择Java进程功能 </li>
+        <li> support custom selection Java process</li>
       </ul>
       <p>1.0-RELEASE</p>
       <ul>
