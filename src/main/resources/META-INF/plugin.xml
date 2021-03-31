@@ -1,29 +1,45 @@
 <idea-plugin>
     <id>ArthasHotSwap</id>
-    <name>Arthas Hot Swap</name>
+    <name>ArthasHotSwap</name>
     <vendor email="xxxtai@163.com" url="https://github.com/xxxtai/ArthasHotSwap">moda</vendor>
     <description><![CDATA[
-    <p> Arthas Hot Swap </p>
-    <p><a href="https://github.com/xxxtai/ArthasHotSwap">访问Github</a> </p>
-    <ul> 无需安装任何sdk实现远程热部署，提升开发效率利器，使用流程：本地编译->右键选择Arthas Hot Swap->自动生成命令复制到剪切板->登录远程环境粘贴执行命令->热部署成功。</ul>
+    <p> ArthasHotSwap </p>
+    <p><a href="https://github.com/xxxtai/ArthasHotSwap">Github</a> </p>
+    <ul>Sometimes, when you're making minor changes to your code, you want to immediately see how they will behave in a working application without shutting down the process. As we all know, hot swap can be achieved through debugging. But in some cases, the debugging port is restricted due to permission control, then you will not be able to achieve HotSwap through debugging.
 
-    <ul> 阿里巴巴开源代码诊断工具——Arthas，具有非常强大的功能，其中一项就是热替换，通过redefine命令替换新的class文件。这是一个非常棒的功能，可以帮助开发避免重新启动应用
-    ，迅速部署代码到远程环境。Arthas官方文档推荐使用jad/mc/redefine等一连串命令，流程大概是：jad命令对老class进行反编译->vim编辑源码->mc命令编译源码->redefine热替换class，
-    这种方式存在两个问题：一是太麻烦，二是mc编译大概率会失败。这个插件就是为了提升使用Arthas进行热替换的效率，开发者使用该插件的流程：本地编译->右键选择Arthas Hot Swap->
-    自动生成命令复制到剪切板->登录远程环境粘贴执行命令->热部署成功<ul/>
+The IntelliJ IDEA plugin introduced in this article can help implement hot swap on a remote server, and the operation is simple and fast. The plugin in this article is based on Arths redefine command.
+</ul>
+<p> </p>
 
-    ]]>
-    </description>
+<p> Firstly, Compile the entire project </p>
+<ul>
+HotSwap uses bytecode files, so first, we need to compile related projects, in the future, we can only compile the modified files to save time.
+</ul>
+
+<p> </p>
+
+<p>Secondly, Implementation of ArthasHotSwap</p>
+<ul>
+Find the files(.java or .class) that need to be modified by HotSwap, right click in the IDEA, choose “ArthasHotSwap” and click “Swap this class”. When the plugin is successfully executed in the background, the plugin will copy the command required for HowSwap to the pasteboard.
+</ul>
+
+<p> </p>
+
+<p>Thirdly, Log in and execute command</p>
+<ul>
+Next you need to log in to your remote server, then paste the command form the clipboard and execute it with administrator privileges. If the first execution fails, please execute again. Due to the need for Alibaba Cloud OSS as a medium to transfer bytecode files, your remote server needs to be able to access to the Alibaba Cloud Server.
+</ul>
+    ]]></description>
 
     <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
          on how to target different products -->
     <depends>com.intellij.modules.platform</depends>
 
-    <idea-version since-build="162"/>
+    <idea-version since-build="172"  until-build="202.*"/>
 
     <extensions defaultExtensionNs="com.intellij">
         <projectConfigurable parentId="tools" instance="com.xxxtai.arthas.dialog.SettingDialog"
-                                 id="com.xxxtai.arthas.dialog.SettingDialog" displayName="ArthasHotSwap"/>
+                             id="com.xxxtai.arthas.dialog.SettingDialog" displayName="ArthasHotSwap"/>
         <projectService serviceImplementation="com.xxxtai.arthas.domain.AppSettingsState"/>
 
         <!-- 自定义控制台输入 -->
@@ -38,7 +54,7 @@
         <action id="swapClassAction"
                 class="com.xxxtai.arthas.action.SwapClassAction"
                 text="Swap This Class"
-                description="arthas hot swap">
+                description="arthas hotswap">
         </action>
 
         <group id="arthas-hot-swap-plugin" popup="true"
