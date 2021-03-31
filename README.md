@@ -10,7 +10,8 @@ Sometimes, when you're making minor changes to your code, you want to immediatel
 The IntelliJ IDEA plugin introduced in this article can help implement hot swap on a remote server, and the operation is simple and fast. The plugin in this article is based on [Arths redefine command](https://arthas.aliyun.com/doc/en/redefine.html).
 
 ## Install plugin
-Download the latest version of the installation package from [Releases](https://github.com/xxxtai/ArthasHotSwap/releases), then open IDEA and click, “IntelliJ IDEA(Top Left Corner)” -> "Prefrences" -> “plugins” -> “install pulgin from disk” -> "choose the installation package".
+1. The first way, “IntelliJ IDEA(Top Left Corner)” -> "Prefrences" -> “plugins” -> "Browase Repositories" -> search for ArthasHotSwap
+2. The second way, Download the latest version of the installation package from [Releases](https://github.com/xxxtai/ArthasHotSwap/releases), then open IDEA and click, “IntelliJ IDEA(Top Left Corner)” -> "Prefrences" -> “plugins” -> “install pulgin from disk” -> "choose the installation package".
 
 ## Configure plugin
 Usually you can use it directly without configuration. In some special cases, you need to config "the absolute path of java command" or "specify the full path calss name of Java process" according to the application configuration.
