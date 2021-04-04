@@ -8,6 +8,7 @@
 
 ## 安装插件
 方式一：就像安装普通IDEA插件一样，从IDEA插件仓库搜索安装。
+
 方式二：从[Releases](https://github.com/xxxtai/ArthasHotSwap/releases)下载最新安装包，然后打开IDEA，然后依次点击 “左上角IntelliJ IDEA” -> "Prefrences" -> “plugins” -> “install pulgin from disk” -> "选择下载的安装包"。
 ## 配置插件
 通常你无需配置就可以直接使用，在一些特殊情况下，需要根据应用配置“Java命令绝对路径“或者“指定Arthas连接Java进程的全路径类名”。
