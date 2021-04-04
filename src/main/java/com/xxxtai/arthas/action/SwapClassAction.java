@@ -14,6 +14,7 @@ import com.xxxtai.arthas.domain.Result;
 import com.xxxtai.arthas.facade.OssFacade;
 import com.xxxtai.arthas.facade.impl.OssFacadeImpl;
 import com.xxxtai.arthas.utils.*;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.StringSubstitutor;
 import org.jetbrains.annotations.NotNull;
@@ -44,9 +45,15 @@ public class SwapClassAction extends AnAction {
 
     private static final String DELIMITER_SUFFIX = "]";
 
-    private static final String COMMAND_TEMPLATE = "sudo curl -L %s  > HotSwapScript4OneClass.sh ; "
-        + "chmod +x HotSwapScript4OneClass.sh; "
-        + "yes | ./HotSwapScript4OneClass.sh  %s %s";
+    private static final String COMMAND_TEMPLATE_WITH_MD5_CHECK = "sudo echo \"curl -L %s  > HotSwapScript4OneClass.sh ;\n"
+        + "echo '%s  HotSwapScript4OneClass.sh' > HotSwapScript4OneClass.md5sum;\n"
+        + "md5sum --status -c ./HotSwapScript4OneClass.md5sum;\n"
+        + "if [[ \\$? -eq 0 ]]; then\n"
+        + "    chmod +x HotSwapScript4OneClass.sh;\n"
+        + "    yes | ./HotSwapScript4OneClass.sh  %s %s;\n"
+        + "else\n"
+        + "    echo 'It is necessary to report this error to xxxtai@163.com!!!';\n"
+        + "fi\" > ArthasHotSwapMD5Check.sh; chmod +x ./ArthasHotSwapMD5Check.sh; ./ArthasHotSwapMD5Check.sh;";
 
     private volatile boolean isForceNotify = false;
 
@@ -91,7 +98,13 @@ public class SwapClassAction extends AnAction {
                 return;
             }
 
-            String command = String.format(COMMAND_TEMPLATE, uploadScriptResult.getValue(), encryptInfo.getKey(), encryptInfo.getIv());
+            String command = String.format(COMMAND_TEMPLATE_WITH_MD5_CHECK,
+                uploadScriptResult.getValue(),
+                DigestUtils.md5Hex(hotSwapScript),
+                encryptInfo.getKey(),
+                encryptInfo.getIv()
+            );
+
             ClipboardUtils.setClipboardString(command);
 
             notifyResult(project, currentClassInfo, command);
