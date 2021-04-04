@@ -3,32 +3,32 @@
     <name>ArthasHotSwap</name>
     <vendor email="xxxtai@163.com" url="https://github.com/xxxtai/ArthasHotSwap">moda</vendor>
     <description><![CDATA[
-    <p> ArthasHotSwap </p>
-    <p><a href="https://github.com/xxxtai/ArthasHotSwap">Github</a> </p>
-    <ul>Sometimes, when you're making minor changes to your code, you want to immediately see how they will behave in a working application without shutting down the process. As we all know, hot swap can be achieved through debugging. But in some cases, the debugging port is restricted due to permission control, then you will not be able to achieve HotSwap through debugging.
 
-The IntelliJ IDEA plugin introduced in this article can help implement hot swap on a remote server, and the operation is simple and fast. The plugin in this article is based on Arths redefine command.
-</ul>
-<p> </p>
+	<h1> ArthasHotSwap </h1>
+	<a href="https://github.com/xxxtai/ArthasHotSwap/blob/master/README-CN.md"><img src="https://xxxtai.oss-cn-beijing.aliyuncs.com/picture/readme-cn.png" > </a>
+	<a href="https://github.com/xxxtai/ArthasHotSwap/blob/master/README.md"><img src="https://xxxtai.oss-cn-beijing.aliyuncs.com/picture/readme-en.png" > </a>
+	<a href="https://github.com/xxxtai/ArthasHotSwap/releases"><img src="https://xxxtai.oss-cn-beijing.aliyuncs.com/picture/release.png" > </a>
+	<a href="https://github.com/alibaba/arthas"><img src="https://xxxtai.oss-cn-beijing.aliyuncs.com/picture/arthas.png" > </a>
+	<h2>Abstract</h2>
+    <p>Sometimes, when you're making minor changes to your code, you want to immediately see how they will behave in a working application without shutting down the process. As we all know, hot swap can be achieved through debugging. But in some cases, the debugging port is restricted due to permission control, then you will not be able to achieve HotSwap through debugging.
+		The IntelliJ IDEA plugin introduced in this article can help implement hot swap on a remote server, and the operation is simple and fast. The plugin in this article is based on Arths redefine command.
+	</p>
+	<h2>HotSwap steps</h2>
+	<h3> Firstly, Compile the entire project </h3>
+	<p>
+		HotSwap uses bytecode files, so first, we need to compile related projects, in the future, we can only compile the modified files to save time.
+	</p>
+	<h3>Secondly, Implementation of ArthasHotSwap</h3>
+	<p>
+		Find the files(.java or .class) that need to be modified by HotSwap, right click in the IDEA, choose “ArthasHotSwap” and click “Swap this class”. When the plugin is successfully executed in the background, the plugin will copy the command required for HowSwap to the pasteboard.
+	</p>
+	<h3>Thirdly, Log in and execute command</h3>
+	<p>
+		Next you need to log in to your remote server, then paste the command form the clipboard and execute it with administrator privileges. If the first execution fails, please execute again. Due to the need for Alibaba Cloud OSS as a medium to transfer bytecode files, your remote server needs to be able to access to the Alibaba Cloud Server.
+	</p>
 
-<p> Firstly, Compile the entire project </p>
-<ul>
-HotSwap uses bytecode files, so first, we need to compile related projects, in the future, we can only compile the modified files to save time.
-</ul>
 
-<p> </p>
 
-<p>Secondly, Implementation of ArthasHotSwap</p>
-<ul>
-Find the files(.java or .class) that need to be modified by HotSwap, right click in the IDEA, choose “ArthasHotSwap” and click “Swap this class”. When the plugin is successfully executed in the background, the plugin will copy the command required for HowSwap to the pasteboard.
-</ul>
-
-<p> </p>
-
-<p>Thirdly, Log in and execute command</p>
-<ul>
-Next you need to log in to your remote server, then paste the command form the clipboard and execute it with administrator privileges. If the first execution fails, please execute again. Due to the need for Alibaba Cloud OSS as a medium to transfer bytecode files, your remote server needs to be able to access to the Alibaba Cloud Server.
-</ul>
     ]]></description>
 
     <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
