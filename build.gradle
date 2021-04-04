@@ -1,12 +1,12 @@
 plugins {
     id 'java'
-    id("org.jetbrains.intellij") version "0.7.2"
+    id 'org.jetbrains.intellij' version '0.4.21'
 }
 
 group 'com.xxxtai.arthas'
-version '1.3-since-2020.3.3-RELEASE'
+version '1.3-before-2020.3-RELEASE'
 
-sourceCompatibility = JavaVersion.VERSION_11
+sourceCompatibility = 1.8
 
 repositories {
     mavenCentral()
@@ -24,7 +24,7 @@ dependencies {
 
 // See https://github.com/JetBrains/gradle-intellij-plugin/
 intellij {
-    version '2020.3.3'
+    version '2020.2.3'
     type 'IC'
     updateSinceUntilBuild false
     sameSinceUntilBuild false
