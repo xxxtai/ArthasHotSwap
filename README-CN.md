@@ -7,7 +7,8 @@
 热部署是帮助开发人员提高效率的利器，如果你的开发语言是java，开发环境是远程服务器，远程服务器debug端口被限制，那么你可能无法通过debug HotSwap实现热部署，那么本文介绍的IntelliJ IDEA插件可以帮助你在远程服务器实现热部署，而且操作简单快捷。本文热部署插件是基于[Arthas redefine](https://arthas.aliyun.com/doc/redefine.html)命令实现的，使用该插件进行远程热部署无需任何配置，无需使用debug端口，只需几个简单动作就能完成。
 
 ## 安装插件
-从[Releases](https://github.com/xxxtai/ArthasHotSwap/releases)下载最新安装包，然后打开IDEA，然后依次点击 “左上角IntelliJ IDEA” -> "Prefrences" -> “plugins” -> “install pulgin from disk” -> "选择下载的安装包"。
+方式一：就像安装普通IDEA插件一样，从IDEA插件仓库搜索安装。
+方式二：从[Releases](https://github.com/xxxtai/ArthasHotSwap/releases)下载最新安装包，然后打开IDEA，然后依次点击 “左上角IntelliJ IDEA” -> "Prefrences" -> “plugins” -> “install pulgin from disk” -> "选择下载的安装包"。
 ## 配置插件
 通常你无需配置就可以直接使用，在一些特殊情况下，需要根据应用配置“Java命令绝对路径“或者“指定Arthas连接Java进程的全路径类名”。
 打开IDEA，然后依次点击 “IntelliJ IDEA(左上角)” -> "Prefrences" -> “Tools” -> “ArthasHotSwap”。
