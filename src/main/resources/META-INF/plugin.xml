@@ -34,13 +34,15 @@
     <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
          on how to target different products -->
     <depends>com.intellij.modules.platform</depends>
-
-    <idea-version since-build="172"  until-build="202.*"/>
+<!--    until-build="202.*"-->
+    <idea-version since-build="203.3645.34"  />
 
     <extensions defaultExtensionNs="com.intellij">
         <projectConfigurable parentId="tools" instance="com.xxxtai.arthas.dialog.SettingDialog"
                              id="com.xxxtai.arthas.dialog.SettingDialog" displayName="ArthasHotSwap"/>
         <projectService serviceImplementation="com.xxxtai.arthas.domain.AppSettingsState"/>
+
+        <notificationGroup id="ArthasHotSwap" displayType="BALLOON" />
 
         <!-- 自定义控制台输入 -->
         <toolWindow canCloseContents="true" anchor="bottom"
