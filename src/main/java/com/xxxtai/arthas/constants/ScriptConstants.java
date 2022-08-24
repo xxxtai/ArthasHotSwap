@@ -7,7 +7,7 @@ package com.xxxtai.arthas.constants;
  */
 public class ScriptConstants {
 
-    public final static String SCRIPT_ONE_CLASS_FILE_PATH = "/scripts/template/HotSwapScript4OneClass.sh";
+    public final static String SCRIPT_ONE_CLASS_FILE_PATH = "scripts/template/HotSwapScript4OneClass.sh";
 
     public final static String CLASS_NAME = "className";
 
