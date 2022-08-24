@@ -34,8 +34,8 @@
     <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
          on how to target different products -->
     <depends>com.intellij.modules.platform</depends>
-<!--    until-build="202.*"-->
-    <idea-version since-build="203.3645.34"  />
+    
+    <idea-version since-build="212"  until-build="213.*"/>
 
     <extensions defaultExtensionNs="com.intellij">
         <projectConfigurable parentId="tools" instance="com.xxxtai.arthas.dialog.SettingDialog"
