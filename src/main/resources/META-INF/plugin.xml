@@ -35,7 +35,7 @@
          on how to target different products -->
     <depends>com.intellij.modules.platform</depends>
     
-    <idea-version since-build="212"  until-build="213.*"/>
+    <idea-version since-build="213"  until-build="223.*"/>
 
     <extensions defaultExtensionNs="com.intellij">
         <projectConfigurable parentId="tools" instance="com.xxxtai.arthas.dialog.SettingDialog"
