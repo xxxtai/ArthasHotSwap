@@ -4,7 +4,7 @@ plugins {
 }
 
 group 'com.xxxtai.arthas'
-version '2.0'
+version '4.1'
 
 sourceCompatibility = JavaVersion.VERSION_11
 
@@ -24,15 +24,15 @@ dependencies {
 
 // See https://github.com/JetBrains/gradle-intellij-plugin/
 intellij {
-    version.set("2022.2.1")
-    type.set("IC") // Target IDE Platform
+    version.set("2024.1")
+    type.set("IU") // Target IDE Platform
 }
 
 
 tasks {
     patchPluginXml {
-        sinceBuild.set("213")
-        untilBuild.set("231.*")
+        sinceBuild.set("231")
+        untilBuild.set("253.*")
     }
 }
 

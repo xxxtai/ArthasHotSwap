@@ -54,8 +54,7 @@ public class SettingDialog implements Configurable {
 
     @Override
     public void apply() throws ConfigurationException {
-        if (StringUtils.isNotBlank(mySettingsComponent.getOssEndpointText())
-            && !mySettingsComponent.getOssEndpointText().contains(CommonConstants.URL_SEPARATOR)) {
+        if (!mySettingsComponent.getOssEndpointText().isBlank() && !mySettingsComponent.getOssEndpointText().contains(CommonConstants.URL_SEPARATOR)) {
             throw new ConfigurationException("endpoint should start with http:// or https://");
         }
         settings.endpoint = mySettingsComponent.getOssEndpointText();
