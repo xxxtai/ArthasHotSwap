@@ -63,7 +63,7 @@ public class SwapClassAction extends AnAction {
     public void actionPerformed(@NotNull AnActionEvent e) {
         DataContext dataContext = e.getDataContext();
         Project project = dataContext.getData(CommonDataKeys.PROJECT);
-        forceNotify(project);
+//        forceNotify(project);
         try {
             ClassInfo currentClassInfo = parseClassInfoFromDataContext(dataContext);
             byte[] currentClassBytes = findTheSwapClass(currentClassInfo);
